@@ -1,0 +1,93 @@
+@import 'tailwindcss';
+
+/*
+  Palette sampled directly from the Dogvita brand system reference:
+  deep forest green ink, butter-cream surfaces, soft blush/peach accents.
+*/
+@theme {
+  --color-ink: #26301f;
+  --color-forest: #3d4b35;
+  --color-moss: #4e5d48;
+  --color-sage: #8c9c7e;
+  --color-haze: #c3ccb6;
+
+  --color-cream: #fdf8ed;
+  --color-shell: #f4f0e4;
+  --color-butter: #f7e2b6;
+  --color-butter-soft: #fbeed2;
+
+  --color-blush: #eec1d5;
+  --color-peach: #fbd6ac;
+
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+  --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 1.75rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* clears the sticky header when jumping to a section */
+    scroll-padding-top: 5.5rem;
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-forest);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  /* Warm, slightly-lifted photo card used throughout the page. */
+  .photo-card {
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    background-color: var(--color-shell);
+    box-shadow:
+      0 1px 2px rgb(38 48 31 / 0.06),
+      0 18px 40px -24px rgb(38 48 31 / 0.35);
+  }
+}
+
+/* Continuous ticker for the marquee strip. */
+@keyframes petsy-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: petsy-marquee 38s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .marquee-track {
+    animation: none;
+  }
+}

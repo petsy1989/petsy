@@ -1,0 +1,97 @@
+<script setup lang="ts">
+import SectionHeading from './SectionHeading.vue'
+import WhatsAppButton from './WhatsAppButton.vue'
+import { business, contact, mailtoUrl, telUrl } from '@/data/site'
+</script>
+
+<template>
+  <section id="contact" class="bg-forest py-20 text-cream sm:py-28 lg:py-32">
+    <div class="mx-auto max-w-6xl px-5 sm:px-8">
+      <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
+        <div>
+          <SectionHeading :eyebrow="contact.eyebrow" :heading="contact.heading" invert>
+            <p class="mt-5 max-w-md text-[1.04rem] leading-relaxed text-cream/75">
+              {{ contact.body }}
+            </p>
+          </SectionHeading>
+
+          <WhatsAppButton size="lg" variant="cream" class="mt-9" />
+
+          <p class="mt-4 text-[0.9rem] text-cream/60">{{ contact.responseNote }}</p>
+        </div>
+
+        <!-- Details -->
+        <ul class="space-y-1 lg:pt-4">
+          <li>
+            <a
+              :href="mailtoUrl"
+              class="group flex items-center gap-4 border-b border-cream/15 py-5 transition-colors hover:border-butter"
+            >
+              <span
+                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-cream/10 transition-colors group-hover:bg-butter"
+                aria-hidden="true"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-cream transition-colors group-hover:text-ink">
+                  <rect x="3" y="5.5" width="18" height="13" rx="2.5" stroke="currentColor" stroke-width="1.7" />
+                  <path d="m4 8 8 5.5L20 8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+                </svg>
+              </span>
+              <span class="min-w-0">
+                <span class="block text-[0.78rem] tracking-[0.12em] text-cream/55 uppercase">Email</span>
+                <span class="block truncate text-[1.05rem] font-medium">{{ business.email }}</span>
+              </span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              :href="telUrl"
+              class="group flex items-center gap-4 border-b border-cream/15 py-5 transition-colors hover:border-butter"
+            >
+              <span
+                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-cream/10 transition-colors group-hover:bg-butter"
+                aria-hidden="true"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-cream transition-colors group-hover:text-ink">
+                  <path
+                    d="M6.2 3.8h3l1.4 3.6-2 1.4a12 12 0 0 0 5.6 5.6l1.4-2 3.6 1.4v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.2 6a2 2 0 0 1 2-2.2Z"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+              <span>
+                <span class="block text-[0.78rem] tracking-[0.12em] text-cream/55 uppercase">Phone</span>
+                <span class="block text-[1.05rem] font-medium">{{ business.phoneDisplay }}</span>
+              </span>
+            </a>
+          </li>
+
+          <li>
+            <div class="flex items-center gap-4 border-b border-cream/15 py-5">
+              <span
+                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-cream/10"
+                aria-hidden="true"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-cream">
+                  <path
+                    d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                    stroke-linejoin="round"
+                  />
+                  <circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.7" />
+                </svg>
+              </span>
+              <span>
+                <span class="block text-[0.78rem] tracking-[0.12em] text-cream/55 uppercase">Service area</span>
+                <span class="block text-[1.05rem] font-medium">{{ business.serviceArea }}</span>
+              </span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</template>
