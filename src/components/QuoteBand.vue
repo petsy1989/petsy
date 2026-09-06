@@ -72,7 +72,7 @@ onBeforeUnmount(() => {
           </div>
         </TransitionGroup>
 
-        <div class="mt-6 flex items-center gap-2" aria-label="Testimonial navigation">
+        <div class="mt-6 flex items-center justify-center gap-2 sm:justify-start" aria-label="Testimonial navigation">
           <button
             v-for="(testimonial, index) in testimonials"
             :key="testimonial.author + '-dot'"
