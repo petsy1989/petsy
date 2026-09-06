@@ -4,9 +4,8 @@ import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
-  // Served as a GitHub Pages project site at rolfo85.github.io/petsy/,
-  // not from the domain root.
-  base: '/petsy/',
+  // Served from the custom domain root (petsy.care).
+  base: '/',
   plugins: [vue(), tailwindcss()],
   resolve: {
     alias: {
