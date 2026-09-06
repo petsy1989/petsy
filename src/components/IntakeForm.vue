@@ -139,7 +139,7 @@ async function submitForm() {
 </script>
 
 <template>
-  <section class="pt-28 sm:pt-36">
+  <section class="pt-28 pb-16 sm:pt-36 sm:pb-24">
     <div class="mx-auto max-w-6xl px-5 sm:px-8">
       <div class="overflow-hidden rounded-card bg-shell">
         <div class="relative h-[22rem] w-full sm:h-[28rem]">

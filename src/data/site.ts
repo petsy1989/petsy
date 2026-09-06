@@ -248,5 +248,5 @@ export const contact = {
   eyebrow: 'Contact',
   heading: 'Let’s meet your dog.',
   body: 'Bring your dog to explore their new home. The first hour at Petsy is on me for them to get comfortable and have fun. 🐾',
-  responseNote: 'I usually reply within a couple of hours, Monday to Saturday.',
+  responseNote: 'I usually reply within a couple of hours, Monday to Sunday.',
 }
