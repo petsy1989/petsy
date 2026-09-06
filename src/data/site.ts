@@ -114,7 +114,7 @@ export const hero = {
   eyebrow: 'Dog walking & pet care in ' + business.serviceArea,
   headline: 'Come as a client.',
   headlineAccent: 'Leave as family.',
-  body: 'A warm, personal place for daycare and boarding, where your dog gets the attention, patience, and love they deserve. With 5 years of hands on experience caring for dogs and thousands of happy tails along the way, I’ve learned that every dog is different, and that’s what makes them special.',
+  body: 'A warm, personal place for daycare and boarding, where your dog gets the attention, patience, and love they deserve. With 5 years of hands-on experience, I’ve learned that every dog is different and that’s what makes them special.',
   ctaPrimary: 'Text me on WhatsApp',
   ctaSecondary: 'See rates',
 }

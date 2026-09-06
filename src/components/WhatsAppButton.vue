@@ -1,15 +1,23 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useAttrs } from 'vue'
 import { whatsappUrl } from '@/data/site'
+
+defineOptions({ inheritAttrs: false })
+
+const attrs = useAttrs()
 
 const props = withDefaults(
   defineProps<{
     label?: string
+    /** Label for the desktop variant, which links to the contact section. */
+    desktopLabel?: string
+    /** Override the desktop link target (defaults to the contact section). */
+    desktopHref?: string
     size?: 'sm' | 'md' | 'lg'
     /** Inverted styling for use on the dark green panels. */
     variant?: 'solid' | 'cream'
   }>(),
-  { label: 'Text me on WhatsApp', size: 'md', variant: 'solid' },
+  { label: 'Text me on WhatsApp', desktopLabel: 'Contact me', desktopHref: '#contact', size: 'md', variant: 'solid' },
 )
 
 const sizeClasses = computed(
@@ -31,11 +39,13 @@ const iconSize = computed(() => (props.size === 'sm' ? 17 : 20))
 </script>
 
 <template>
+  <!-- Mobile: WhatsApp deep link (most phone users have the app). -->
   <a
+    v-bind="attrs"
     :href="whatsappUrl"
     target="_blank"
     rel="noopener noreferrer"
-    class="inline-flex items-center rounded-full font-medium transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
+    class="inline-flex items-center rounded-full font-medium transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 sm:hidden"
     :class="[sizeClasses, variantClasses]"
   >
     <svg
@@ -51,5 +61,15 @@ const iconSize = computed(() => (props.size === 'sm' ? 17 : 20))
       />
     </svg>
     <span>{{ label }}</span>
+  </a>
+
+  <!-- Desktop: scroll to the contact section instead. -->
+  <a
+    v-bind="attrs"
+    :href="desktopHref"
+    class="hidden items-center rounded-full font-medium transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 sm:inline-flex"
+    :class="[sizeClasses, variantClasses]"
+  >
+    <span>{{ desktopLabel }}</span>
   </a>
 </template>

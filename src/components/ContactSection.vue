@@ -1,10 +1,28 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import SectionHeading from './SectionHeading.vue'
 import WhatsAppButton from './WhatsAppButton.vue'
 import { business, contact, mailtoUrl, telUrl } from '@/data/site'
 import { asset } from '@/lib/asset'
 
 const intakeFormUrl = asset('/intake-form/')
+
+const copiedField = ref<'email' | 'phone' | null>(null)
+let copiedTimer: ReturnType<typeof setTimeout> | undefined
+
+async function copyValue(field: 'email' | 'phone', value: string, event: MouseEvent) {
+  // Desktop only: copy instead of following the mailto/tel link.
+  if (window.innerWidth < 640) return
+  event.preventDefault()
+  try {
+    await navigator.clipboard.writeText(value)
+    copiedField.value = field
+    clearTimeout(copiedTimer)
+    copiedTimer = setTimeout(() => (copiedField.value = null), 1600)
+  } catch {
+    window.location.href = field === 'email' ? mailtoUrl : telUrl
+  }
+}
 </script>
 
 <template>
@@ -18,7 +36,7 @@ const intakeFormUrl = asset('/intake-form/')
             </p>
           </SectionHeading>
 
-          <WhatsAppButton size="lg" variant="cream" class="mt-9" />
+          <WhatsAppButton size="lg" variant="cream" class="mt-9" desktop-label="Ask me anything" :desktop-href="mailtoUrl" />
 
           <p class="mt-4 text-[0.9rem] text-cream/60">{{ contact.responseNote }}</p>
         </div>
@@ -29,6 +47,7 @@ const intakeFormUrl = asset('/intake-form/')
             <a
               :href="mailtoUrl"
               class="group flex items-center gap-4 border-b border-cream/15 py-5 transition-colors hover:border-butter"
+              @click="copyValue('email', business.email, $event)"
             >
               <span
                 class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-cream/10 transition-colors group-hover:bg-butter"
@@ -43,6 +62,21 @@ const intakeFormUrl = asset('/intake-form/')
                 <span class="block text-[0.78rem] tracking-[0.12em] text-cream/55 uppercase">Email</span>
                 <span class="block truncate text-[1.05rem] font-medium">{{ business.email }}</span>
               </span>
+              <span
+                class="ml-auto hidden shrink-0 items-center gap-1.5 text-[0.8rem] text-cream/0 transition-colors group-hover:text-cream/60 sm:flex"
+                aria-hidden="true"
+              >
+                <template v-if="copiedField === 'email'">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="text-butter">
+                    <path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="text-butter">Copied</span>
+                </template>
+                <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7" />
+                  <path d="M5 15V6a2 2 0 0 1 2-2h9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+                </svg>
+              </span>
             </a>
           </li>
 
@@ -50,6 +84,7 @@ const intakeFormUrl = asset('/intake-form/')
             <a
               :href="telUrl"
               class="group flex items-center gap-4 border-b border-cream/15 py-5 transition-colors hover:border-butter"
+              @click="copyValue('phone', business.phoneDisplay, $event)"
             >
               <span
                 class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-cream/10 transition-colors group-hover:bg-butter"
@@ -67,6 +102,21 @@ const intakeFormUrl = asset('/intake-form/')
               <span>
                 <span class="block text-[0.78rem] tracking-[0.12em] text-cream/55 uppercase">Phone</span>
                 <span class="block text-[1.05rem] font-medium">{{ business.phoneDisplay }}</span>
+              </span>
+              <span
+                class="ml-auto hidden shrink-0 items-center gap-1.5 text-[0.8rem] text-cream/0 transition-colors group-hover:text-cream/60 sm:flex"
+                aria-hidden="true"
+              >
+                <template v-if="copiedField === 'phone'">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="text-butter">
+                    <path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  <span class="text-butter">Copied</span>
+                </template>
+                <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7" />
+                  <path d="M5 15V6a2 2 0 0 1 2-2h9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+                </svg>
               </span>
             </a>
           </li>
@@ -90,6 +140,20 @@ const intakeFormUrl = asset('/intake-form/')
               <span>
                 <span class="block text-[0.78rem] tracking-[0.12em] text-cream/55 uppercase">For new clients</span>
                 <span class="block text-[1.05rem] font-medium">Intake form</span>
+              </span>
+              <span
+                class="ml-auto shrink-0 text-cream/40 transition-colors group-hover:text-butter"
+                aria-hidden="true"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M14 4h6v6M20 4l-9 9M19 13.5V19a1.5 1.5 0 0 1-1.5 1.5h-12A1.5 1.5 0 0 1 4 19V6.5A1.5 1.5 0 0 1 5.5 5H11"
+                    stroke="currentColor"
+                    stroke-width="1.7"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
               </span>
             </a>
           </li>
