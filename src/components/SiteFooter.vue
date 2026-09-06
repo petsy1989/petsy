@@ -3,7 +3,9 @@ import BrandLogo from './BrandLogo.vue'
 import { business, navLinks } from '@/data/site'
 import { asset } from '@/lib/asset'
 
-defineProps<{ minimal?: boolean }>()
+withDefaults(defineProps<{ minimal?: boolean; logoHref?: string }>(), {
+  logoHref: '#top',
+})
 
 const year = new Date().getFullYear()
 const intakeFormUrl = asset('/intake-form/')
@@ -14,7 +16,7 @@ const intakeFormUrl = asset('/intake-form/')
     <div
       class="mx-auto flex max-w-6xl flex-col items-start gap-7 px-5 sm:px-8 md:flex-row md:items-center md:justify-between"
     >
-      <a href="#top" aria-label="Petsy — back to top">
+      <a :href="logoHref" aria-label="Petsy — back to top">
         <BrandLogo :height="38" />
       </a>
 

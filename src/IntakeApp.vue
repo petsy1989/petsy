@@ -2,12 +2,15 @@
 import BrandLogo from './components/BrandLogo.vue'
 import IntakeForm from './components/IntakeForm.vue'
 import SiteFooter from './components/SiteFooter.vue'
+import { asset } from '@/lib/asset'
+
+const homeUrl = asset('/')
 </script>
 
 <template>
   <header class="absolute inset-x-0 top-0 z-50">
     <div class="mx-auto max-w-6xl px-5 py-6 sm:px-8 sm:py-8">
-      <a href="./" aria-label="Petsy — back to homepage">
+      <a :href="homeUrl" aria-label="Petsy — back to homepage">
         <BrandLogo :height="52" />
       </a>
     </div>
@@ -17,5 +20,5 @@ import SiteFooter from './components/SiteFooter.vue'
     <IntakeForm />
   </main>
 
-  <SiteFooter minimal />
+  <SiteFooter minimal :logo-href="homeUrl" />
 </template>
