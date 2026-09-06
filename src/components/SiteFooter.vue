@@ -2,6 +2,8 @@
 import BrandLogo from './BrandLogo.vue'
 import { business, navLinks } from '@/data/site'
 
+defineProps<{ minimal?: boolean }>()
+
 const year = new Date().getFullYear()
 </script>
 
@@ -14,7 +16,7 @@ const year = new Date().getFullYear()
         <BrandLogo :height="38" />
       </a>
 
-      <nav aria-label="Footer">
+      <nav v-if="!minimal" aria-label="Footer">
         <ul class="flex flex-wrap items-center gap-x-7 gap-y-2">
           <li v-for="link in navLinks" :key="link.href">
             <a
@@ -22,6 +24,11 @@ const year = new Date().getFullYear()
               class="text-[0.92rem] text-ink/60 transition-colors hover:text-ink"
             >
               {{ link.label }}
+            </a>
+          </li>
+          <li>
+            <a href="#/intake-form" class="text-[0.92rem] text-ink/60 transition-colors hover:text-ink">
+              Intake form
             </a>
           </li>
         </ul>

@@ -69,6 +69,27 @@ import { business, contact, mailtoUrl, telUrl } from '@/data/site'
           </li>
 
           <li>
+            <a
+              href="#/intake-form"
+              class="group flex items-center gap-4 border-b border-cream/15 py-5 transition-colors hover:border-butter"
+            >
+              <span
+                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-cream/10 transition-colors group-hover:bg-butter"
+                aria-hidden="true"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" class="text-cream transition-colors group-hover:text-ink">
+                  <path d="M7 3.8h8.8L19 7v13.2H7V3.8Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
+                  <path d="M15 3.8V7h4M10 11h6M10 14.5h6M10 18h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+                </svg>
+              </span>
+              <span>
+                <span class="block text-[0.78rem] tracking-[0.12em] text-cream/55 uppercase">For new clients</span>
+                <span class="block text-[1.05rem] font-medium">Intake form</span>
+              </span>
+            </a>
+          </li>
+
+          <li>
             <div class="flex items-center gap-4 border-b border-cream/15 py-5">
               <span
                 class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-cream/10"

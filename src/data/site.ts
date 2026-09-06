@@ -103,7 +103,7 @@ export const mailtoUrl = `mailto:${business.email}?subject=${encodeURIComponent(
 
 export const navLinks: NavLink[] = [
   { label: 'About', href: '#about' },
-  { label: 'Services', href: '#services' },
+  { label: 'Services & rates', href: '#services' },
   { label: 'Gallery', href: '#gallery' },
   { label: 'Contact', href: '#contact' },
 ]
