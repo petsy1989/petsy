@@ -233,7 +233,7 @@ export const services: ServicesContent = {
 
 export const gallery: GalleryContent = {
   eyebrow: 'The regulars',
-  heading: 'A few of my favourite clients.',
+  heading: 'A little peek at life at Petsy. 🐾',
   images: [
     { src: asset('/images/dog-pug.jpg'), alt: 'A fawn pug wearing a sage green bandana', ratio: 'aspect-[4/5]' },
     { src: asset('/images/dog-corgi.jpg'), alt: 'A corgi trotting across the grass in a park', ratio: 'aspect-[4/5]' },
