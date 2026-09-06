@@ -112,9 +112,9 @@ export const navLinks: NavLink[] = [
 
 export const hero = {
   eyebrow: 'Dog walking & pet care in ' + business.serviceArea,
-  headline: 'Your dog.',
-  headlineAccent: 'My favourite job.',
-  body: 'Neighbourhood walks, drop-in visits and overnight stays — run by one person who actually knows your dog. Photo updates after every single visit, so you always know how the day went.',
+  headline: 'Come as a client.',
+  headlineAccent: 'Leave as family.',
+  body: 'A warm, personal place for daycare and boarding, where your dog gets the attention, patience, and love they deserve. With 5 years of hands on experience caring for dogs and thousands of happy tails along the way, I’ve learned that every dog is different, and that’s what makes them special.',
   ctaPrimary: 'Text me on WhatsApp',
   ctaSecondary: 'See rates',
 }
@@ -122,11 +122,11 @@ export const hero = {
 /** Words that scroll across the green strip under the hero. PLACEHOLDER. */
 export const marqueeWords: string[] = [
   'Daily walks',
-  'Drop-in visits',
+  'Drop in visits',
   'Overnight care',
   'Puppy visits',
   'Photo updates',
-  'Solo & small-group',
+  'Solo & small group',
   'Medication support',
   'Senior dogs welcome',
 ]
@@ -172,7 +172,7 @@ export const testimonials: Testimonial[] = [
     author: 'Rosana B.',
     source: 'Rover',
     image: asset('/images/testimonial-walk.png'),
-    imageAlt: 'A happy dog walking on a tree-lined park path',
+    imageAlt: 'A happy dog walking on a tree lined park path',
   },
 ]
 
@@ -181,7 +181,7 @@ export const testimonials: Testimonial[] = [
 export const services: ServicesContent = {
   eyebrow: 'Services & rates',
   heading: 'Daycare, boarding & a few thoughtful extras.',
-  body: 'A simple, tailored care menu for dogs who need daytime enrichment or an overnight stay, with the same calm routine and photo updates every time.',
+  body: 'Everything your dog needs for a happy, comfortable stay, with plenty of love and attention along the way.',
   plans: [
     {
       name: 'Daycare',
@@ -198,13 +198,13 @@ export const services: ServicesContent = {
     },
     {
       name: 'Boarding',
-      tagline: 'Overnight stays with attentive care, flexibility and plenty of one-to-one time.',
+      tagline: 'Overnight stays with attentive care, flexibility and plenty of one to one time.',
       price: '$60',
       cadence: 'per 24 hrs',
       featured: true,
       features: [
         'Additional hours: $5/hr',
-        'Flexible check-in & check-out by appointment',
+        'Flexible check in & check out by appointment',
         'Medication & feeding support',
         'Photos & videos update',
         'Nature stroll',
@@ -222,11 +222,11 @@ export const services: ServicesContent = {
     {
       name: 'Brush out',
       price: '$10',
-      note: 'Quick brush-out for light shedding. Heavy shedding or matting starts at $15.',
+      note: 'Quick brush out for light shedding. Heavy shedding or matting starts at $15.',
     },
   ],
   footnote:
-    'Daycare pricing is based on half-day and full-day options. Boarding is charged at $60 per 24 hours, with additional hours at $5/hr. First meet-and-greet is always complimentary.',
+    'Daycare pricing is based on half day and full day options. Boarding is charged at $60 per 24 hours, with additional hours at $5/hr. First meet and greet is always complimentary.',
 }
 
 /* ── Gallery ─────────────────────────────────────────────────── */
@@ -238,7 +238,7 @@ export const gallery: GalleryContent = {
     { src: asset('/images/dog-pug.jpg'), alt: 'A fawn pug wearing a sage green bandana', ratio: 'aspect-[4/5]' },
     { src: asset('/images/dog-corgi.jpg'), alt: 'A corgi trotting across the grass in a park', ratio: 'aspect-[4/5]' },
     { src: asset('/images/dog-rest.jpg'), alt: 'A scruffy terrier curled up asleep on a linen sofa', ratio: 'aspect-[4/5]' },
-    { src: asset('/images/dog-collie.jpg'), alt: 'A border collie leaping to catch a ball mid-air', ratio: 'aspect-[4/5]' },
+    { src: asset('/images/dog-collie.jpg'), alt: 'A border collie leaping to catch a ball mid air', ratio: 'aspect-[4/5]' },
   ],
 }
 
@@ -247,6 +247,6 @@ export const gallery: GalleryContent = {
 export const contact = {
   eyebrow: 'Contact',
   heading: 'Let’s meet your dog.',
-  body: 'The first step is always a free meet-and-greet — I come to you, we walk around the block, and your dog decides whether I make the cut.',
-  responseNote: 'I usually reply within a couple of hours, Mon–Sat.',
+  body: 'Bring your dog to explore their new home. The first hour at Petsy is on me for them to get comfortable and have fun. 🐾',
+  responseNote: 'I usually reply within a couple of hours, Monday to Saturday.',
 }
