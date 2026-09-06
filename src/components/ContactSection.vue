@@ -2,6 +2,9 @@
 import SectionHeading from './SectionHeading.vue'
 import WhatsAppButton from './WhatsAppButton.vue'
 import { business, contact, mailtoUrl, telUrl } from '@/data/site'
+import { asset } from '@/lib/asset'
+
+const intakeFormUrl = asset('/intake-form/')
 </script>
 
 <template>
@@ -70,7 +73,9 @@ import { business, contact, mailtoUrl, telUrl } from '@/data/site'
 
           <li>
             <a
-              href="#/intake-form"
+              :href="intakeFormUrl"
+              target="_blank"
+              rel="noopener"
               class="group flex items-center gap-4 border-b border-cream/15 py-5 transition-colors hover:border-butter"
             >
               <span

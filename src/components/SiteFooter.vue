@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import BrandLogo from './BrandLogo.vue'
 import { business, navLinks } from '@/data/site'
+import { asset } from '@/lib/asset'
 
 defineProps<{ minimal?: boolean }>()
 
 const year = new Date().getFullYear()
+const intakeFormUrl = asset('/intake-form/')
 </script>
 
 <template>
@@ -27,7 +29,12 @@ const year = new Date().getFullYear()
             </a>
           </li>
           <li>
-            <a href="#/intake-form" class="text-[0.92rem] text-ink/60 transition-colors hover:text-ink">
+            <a
+              :href="intakeFormUrl"
+              target="_blank"
+              rel="noopener"
+              class="text-[0.92rem] text-ink/60 transition-colors hover:text-ink"
+            >
               Intake form
             </a>
           </li>
