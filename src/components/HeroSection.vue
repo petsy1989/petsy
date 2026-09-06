@@ -19,15 +19,8 @@ import { asset } from '@/lib/asset'
       <div class="grid items-center gap-12 lg:grid-cols-[1.12fr_0.88fr] lg:gap-14">
         <!-- Copy -->
         <div>
-          <p
-            class="inline-flex items-center gap-2 rounded-full border border-ink/12 px-3.5 py-1.5 text-[0.8rem] font-medium tracking-wide text-ink/65"
-          >
-            <span class="h-1.5 w-1.5 rounded-full bg-sage" aria-hidden="true" />
-            {{ hero.eyebrow }}
-          </p>
-
           <h1
-            class="mt-6 font-display text-[2.6rem] leading-[0.98] font-semibold sm:text-6xl sm:leading-[0.96] lg:text-[4.4rem]"
+            class="font-display text-[2.6rem] leading-[0.98] font-semibold sm:text-6xl sm:leading-[0.96] lg:text-[4.4rem]"
           >
             {{ hero.headline }}<br />
             <span class="text-moss italic">{{ hero.headlineAccent }}</span>
@@ -56,24 +49,6 @@ import { asset } from '@/lib/asset'
             </a>
           </div>
 
-          <ul class="mt-9 flex flex-wrap items-center gap-x-6 gap-y-2.5">
-            <li
-              v-for="point in hero.proofPoints"
-              :key="point"
-              class="flex items-center gap-2 text-[0.88rem] text-ink/60"
-            >
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path
-                  d="m3.5 8.4 3 3 6-6.8"
-                  stroke="var(--color-sage)"
-                  stroke-width="1.8"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-              {{ point }}
-            </li>
-          </ul>
         </div>
 
         <!-- Photo -->

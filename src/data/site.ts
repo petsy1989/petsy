@@ -3,7 +3,7 @@
  *  ALL PAGE CONTENT LIVES HERE.
  *
  *  Everything marked PLACEHOLDER is invented filler — swap it for
- *  Paige's real copy, qualifications and rates and the whole page
+ *  Paige's real copy and rates and the whole page
  *  updates. No component edits needed.
  * ─────────────────────────────────────────────────────────────
  */
@@ -34,11 +34,6 @@ export interface AlaCarteItem {
   note: string
 }
 
-export interface Qualification {
-  label: string
-  detail: string
-}
-
 export interface GalleryImage {
   src: string
   alt: string
@@ -50,9 +45,16 @@ export interface AboutContent {
   eyebrow: string
   heading: string
   paragraphs: string[]
-  qualifications: Qualification[]
   portrait: string
   portraitAlt: string
+}
+
+export interface Testimonial {
+  quote: string
+  author: string
+  source: string
+  image: string
+  imageAlt: string
 }
 
 export interface ServicesContent {
@@ -115,8 +117,6 @@ export const hero = {
   body: 'Neighbourhood walks, drop-in visits and overnight stays — run by one person who actually knows your dog. Photo updates after every single visit, so you always know how the day went.',
   ctaPrimary: 'Text me on WhatsApp',
   ctaSecondary: 'See rates',
-  /** Small trust markers under the buttons. PLACEHOLDER. */
-  proofPoints: ['Fully insured & bonded', 'Pet first-aid certified', 'Small groups only'],
 }
 
 /** Words that scroll across the green strip under the hero. PLACEHOLDER. */
@@ -136,30 +136,10 @@ export const marqueeWords: string[] = [
 export const about: AboutContent = {
   eyebrow: 'About me',
   heading: "Hi, I'm Paige.",
-  /** Replace with Paige's real bio — two or three short paragraphs reads best. */
   paragraphs: [
-    "I've been around dogs my whole life, and looking after them has been my full-time job for the better part of a decade. Petsy started because I kept hearing the same thing from friends: they trusted me with their dogs in a way they never quite trusted an app.",
-    "I keep my client list deliberately small. That means your dog gets a familiar face at the door, the same routine every time, and someone who notices when something's a little off — a sore paw, a skipped breakfast, a quieter-than-usual afternoon.",
-    'When I’m not out walking, you’ll find me at the off-leash park with my own scruffy rescue, Juno, who has strong opinions about tennis balls.',
-  ],
-  /** PLACEHOLDER — swap for Paige's real credentials. */
-  qualifications: [
-    {
-      label: 'Pet First Aid & CPR',
-      detail: 'Certified through Walks ’N’ Wags, renewed 2025',
-    },
-    {
-      label: 'Fully insured & bonded',
-      detail: 'Commercial liability coverage on every visit',
-    },
-    {
-      label: 'Police information check',
-      detail: 'Vulnerable sector check on file, available on request',
-    },
-    {
-      label: '9 years professional experience',
-      detail: 'Over 4,000 walks and 300+ overnight stays',
-    },
+    "Hi, welcome to Petsy! Fun fact: my name is pronounced like ‘pets’! You can call me Paige. 🐾",
+    "I’m a lifelong animal lover, and caring for animals is my passion. With experience caring for dogs in both Taiwan and Calgary, I’ve looked after dogs of all sizes, ages, and personalities in daycare, boarding facilities, and animal shelters.",
+    'At Petsy, every dog is treated with patience, care, and plenty of love. My goal is to make your dog feel safe, comfortable, and right at home while they’re with me.',
   ],
   /**
    * PLACEHOLDER portrait — replace with Paige's real photo.
@@ -169,65 +149,84 @@ export const about: AboutContent = {
   portraitAlt: 'Paige, owner of Petsy, out walking with a group of dogs',
 }
 
+export const testimonials: Testimonial[] = [
+  {
+    quote:
+      'Paige was amazing with Oliver. She kept him calm and always sent updates. We’ll definitely book with her again.',
+    author: 'Rodolfo F.',
+    source: 'Rover',
+    image: asset('/images/testimonial-play.png'),
+    imageAlt: 'Two happy dogs playing in a sunny backyard',
+  },
+  {
+    quote:
+      'Paige is a great dog walker. She is always so excited to see my girls, and they’re so happy to see her too.',
+    author: 'Bri K.',
+    source: 'Rover',
+    image: asset('/images/testimonial-rest.png'),
+    imageAlt: 'A relaxed dog resting on a linen bed by a sunny window',
+  },
+  {
+    quote:
+      'Ollie really enjoyed his time with Pei-Tze!!! He came home happy, relaxed, and clearly had a wonderful day.',
+    author: 'Rosana B.',
+    source: 'Rover',
+    image: asset('/images/testimonial-walk.png'),
+    imageAlt: 'A happy dog walking on a tree-lined park path',
+  },
+]
+
 /* ── Services & rates — PLACEHOLDER pricing ──────────────────── */
 
 export const services: ServicesContent = {
   eyebrow: 'Services & rates',
-  heading: 'Pick a rhythm that fits your week.',
-  body: 'Monthly plans mean a guaranteed spot in my schedule and a routine your dog can count on. Cancel or pause any time with a week’s notice.',
+  heading: 'Daycare, boarding & a few thoughtful extras.',
+  body: 'A simple, tailored care menu for dogs who need daytime enrichment or an overnight stay, with the same calm routine and photo updates every time.',
   plans: [
     {
-      name: 'The Stroll',
-      tagline: 'For dogs who just need a mid-week stretch.',
-      price: '$120',
-      cadence: '/month',
+      name: 'Daycare',
+      tagline: 'Flexible daytime care for dogs who need exercise, enrichment and a routine they can trust.',
+      price: '$27',
+      cadence: 'half day (up to 6 hrs)',
       features: [
-        '4 walks per month',
-        '30 minutes per walk',
-        'Small group of 3 dogs max',
-        'Photo update after each walk',
-        'Fresh water & towel-off on return',
+        'Full day option: $48 (> 6 hrs)',
+        'Medication & feeding support',
+        'Photos & videos update',
+        'Nature stroll',
+        'Rooftop outdoor terrace fun',
       ],
     },
     {
-      name: 'The Regular',
-      tagline: 'The one most of my dogs are on.',
-      price: '$320',
-      cadence: '/month',
+      name: 'Boarding',
+      tagline: 'Overnight stays with attentive care, flexibility and plenty of one-to-one time.',
+      price: '$60',
+      cadence: 'per 24 hrs',
       featured: true,
       features: [
-        '12 walks per month',
-        '45 minutes per walk',
-        'Solo or paired walks',
-        'Photo & written update every visit',
+        'Additional hours: $5/hr',
+        'Flexible check-in & check-out by appointment',
         'Medication & feeding support',
-        'Priority on holiday bookings',
+        'Photos & videos update',
+        'Nature stroll',
+        'Rooftop outdoor terrace fun',
       ],
+    },
+  ],
+  alaCarteHeading: 'Extras',
+  alaCarte: [
+    {
+      name: 'Teeth brushing',
+      price: '$10',
+      note: 'Gentle brushing for dogs who need a little extra help keeping their teeth clean.',
     },
     {
-      name: 'The Everyday',
-      tagline: 'Full weekday cover for working households.',
-      price: '$580',
-      cadence: '/month',
-      features: [
-        '20 walks per month',
-        '60 minutes per walk',
-        'Solo walks as standard',
-        'Photo & written update every visit',
-        'Plant watering & mail while you travel',
-        'Two free drop-in visits each month',
-      ],
+      name: 'Brush out',
+      price: '$10',
+      note: 'Quick brush-out for light shedding. Heavy shedding or matting starts at $15.',
     },
   ],
-  alaCarteHeading: 'One-offs & extras',
-  alaCarte: [
-    { name: 'Single walk', price: '$32', note: '45 minutes, no plan needed' },
-    { name: 'Drop-in visit', price: '$24', note: '20 minutes — feed, water, garden break' },
-    { name: 'Overnight stay', price: '$85', note: 'In your home, 12 hours' },
-    { name: 'Puppy visit', price: '$30', note: 'Short, frequent visits for under-6-months' },
-  ],
   footnote:
-    'Rates shown include GST. Holiday bookings (Dec 24 – Jan 1) are charged at 1.5×. First meet-and-greet is always free.',
+    'Daycare pricing is based on half-day and full-day options. Boarding is charged at $60 per 24 hours, with additional hours at $5/hr. First meet-and-greet is always complimentary.',
 }
 
 /* ── Gallery ─────────────────────────────────────────────────── */

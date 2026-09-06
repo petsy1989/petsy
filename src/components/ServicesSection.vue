@@ -14,7 +14,10 @@ import { services } from '@/data/site'
       </SectionHeading>
 
       <!-- Plans -->
-      <div class="mt-12 grid gap-5 lg:mt-16 lg:grid-cols-3 lg:gap-6">
+      <div
+        class="mt-12 grid gap-5 lg:mt-16 lg:gap-7"
+        :class="services.plans.length === 2 ? 'lg:grid-cols-2' : 'lg:grid-cols-3'"
+      >
         <article
           v-for="plan in services.plans"
           :key="plan.name"
@@ -33,13 +36,6 @@ import { services } from '@/data/site'
           </span>
 
           <h3 class="font-display text-2xl font-semibold">{{ plan.name }}</h3>
-          <!-- Fixed height keeps the three prices on one line across the row. -->
-          <p
-            class="mt-2 text-[0.94rem] lg:min-h-[2.9rem]"
-            :class="plan.featured ? 'text-cream/70' : 'text-ink/60'"
-          >
-            {{ plan.tagline }}
-          </p>
 
           <p class="mt-6 flex items-baseline gap-1.5">
             <span class="font-display text-5xl font-semibold tracking-tight">{{ plan.price }}</span>

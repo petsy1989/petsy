@@ -38,43 +38,12 @@ import { about } from '@/data/site'
 
         <!-- Bio -->
         <div>
-          <SectionHeading :eyebrow="about.eyebrow" :heading="about.heading" />
+          <SectionHeading :eyebrow="about.eyebrow" :heading="about.heading" :show-eyebrow="false" />
 
           <div class="mt-7 space-y-5 text-[1.04rem] leading-relaxed text-ink/72">
             <p v-for="(para, i) in about.paragraphs" :key="i">{{ para }}</p>
           </div>
 
-          <!-- Qualifications -->
-          <dl class="mt-11 grid gap-x-8 gap-y-6 sm:grid-cols-2">
-            <div
-              v-for="q in about.qualifications"
-              :key="q.label"
-              class="border-t border-ink/12 pt-4"
-            >
-              <dt class="flex items-start gap-2 font-medium text-ink">
-                <svg
-                  class="mt-1 shrink-0"
-                  width="15"
-                  height="15"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="m3.5 8.4 3 3 6-6.8"
-                    stroke="var(--color-moss)"
-                    stroke-width="1.9"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-                {{ q.label }}
-              </dt>
-              <dd class="mt-1.5 pl-[23px] text-[0.93rem] leading-relaxed text-ink/60">
-                {{ q.detail }}
-              </dd>
-            </div>
-          </dl>
         </div>
       </div>
     </div>

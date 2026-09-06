@@ -1,15 +1,20 @@
 <script setup lang="ts">
-defineProps<{
-  eyebrow: string
-  heading: string
-  /** Renders light-on-dark for the green panels. */
-  invert?: boolean
-}>()
+withDefaults(
+  defineProps<{
+    eyebrow: string
+    heading: string
+    /** Renders light-on-dark for the green panels. */
+    invert?: boolean
+    showEyebrow?: boolean
+  }>(),
+  { showEyebrow: true },
+)
 </script>
 
 <template>
   <div>
     <p
+      v-if="showEyebrow"
       class="flex items-center gap-2.5 text-[0.8rem] font-medium tracking-[0.14em] uppercase"
       :class="invert ? 'text-butter/80' : 'text-moss'"
     >

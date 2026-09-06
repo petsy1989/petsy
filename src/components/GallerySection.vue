@@ -6,7 +6,7 @@ import { gallery } from '@/data/site'
 <template>
   <section id="gallery" class="py-20 sm:py-28 lg:py-32">
     <div class="mx-auto max-w-6xl px-5 sm:px-8">
-      <SectionHeading :eyebrow="gallery.eyebrow" :heading="gallery.heading" />
+      <SectionHeading :eyebrow="gallery.eyebrow" :heading="gallery.heading" :show-eyebrow="false" />
 
       <!--
         Even ratios with a single alternating drop — reads like a contact
