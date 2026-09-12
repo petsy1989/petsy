@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import BrandLogo from './BrandLogo.vue'
-import { business, navLinks } from '@/data/site'
-import { asset } from '@/lib/asset'
+import { business } from '@/data/site'
+import { content, localizePath } from '@/i18n'
 
 withDefaults(defineProps<{ minimal?: boolean; logoHref?: string }>(), {
   logoHref: '#top',
 })
 
 const year = new Date().getFullYear()
-const intakeFormUrl = asset('/intake-form/')
+const intakeFormUrl = localizePath('/intake-form/')
 </script>
 
 <template>
@@ -22,7 +22,7 @@ const intakeFormUrl = asset('/intake-form/')
 
       <nav v-if="!minimal" aria-label="Footer">
         <ul class="flex flex-wrap items-center gap-x-7 gap-y-2">
-          <li v-for="link in navLinks" :key="link.href">
+          <li v-for="link in content.nav" :key="link.href">
             <a
               :href="link.href"
               class="text-[0.92rem] text-ink/60 transition-colors hover:text-ink"
@@ -37,7 +37,7 @@ const intakeFormUrl = asset('/intake-form/')
               rel="noopener"
               class="text-[0.92rem] text-ink/60 transition-colors hover:text-ink"
             >
-              Intake form
+              {{ content.footer.intakeForm }}
             </a>
           </li>
         </ul>

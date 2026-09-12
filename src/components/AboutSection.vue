@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import SectionHeading from './SectionHeading.vue'
-import { about } from '@/data/site'
+import { content } from '@/i18n'
+import { asset } from '@/lib/asset'
 </script>
 
 <template>
@@ -11,8 +12,8 @@ import { about } from '@/data/site'
         <div class="relative lg:sticky lg:top-28 lg:self-start">
           <div class="photo-card aspect-[4/5] w-full max-w-sm lg:max-w-none">
             <img
-              :src="about.portrait"
-              :alt="about.portraitAlt"
+              :src="asset('/images/paige-portrait.jpg')"
+              :alt="content.about.portraitAlt"
               width="1200"
               height="1500"
               loading="lazy"
@@ -38,10 +39,10 @@ import { about } from '@/data/site'
 
         <!-- Bio -->
         <div>
-          <SectionHeading :eyebrow="about.eyebrow" :heading="about.heading" :show-eyebrow="false" />
+          <SectionHeading :eyebrow="content.about.eyebrow" :heading="content.about.heading" :show-eyebrow="false" />
 
           <div class="mt-7 space-y-5 text-[1.04rem] leading-relaxed text-ink/72">
-            <p v-for="(para, i) in about.paragraphs" :key="i">{{ para }}</p>
+            <p v-for="(para, i) in content.about.paragraphs" :key="i">{{ para }}</p>
           </div>
 
         </div>

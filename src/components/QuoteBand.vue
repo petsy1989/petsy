@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
-import { testimonials } from '@/data/site'
+import { content } from '@/i18n'
 
 const activeIndex = ref(0)
 let intervalId: ReturnType<typeof setInterval> | undefined
@@ -10,7 +10,7 @@ const goToSlide = (index: number) => {
 }
 
 const advanceSlide = () => {
-  activeIndex.value = (activeIndex.value + 1) % testimonials.length
+  activeIndex.value = (activeIndex.value + 1) % content.value.testimonials.length
 }
 
 onMounted(() => {
@@ -31,7 +31,7 @@ onBeforeUnmount(() => {
       aria-live="polite"
     >
       <img
-        v-for="(testimonial, index) in testimonials"
+        v-for="(testimonial, index) in content.testimonials"
         v-show="activeIndex === index"
         :key="testimonial.image"
         :src="testimonial.image"
@@ -56,7 +56,7 @@ onBeforeUnmount(() => {
           class="relative min-h-[12rem]"
         >
           <div
-            v-for="(testimonial, index) in testimonials"
+            v-for="(testimonial, index) in content.testimonials"
             v-show="activeIndex === index"
             :key="testimonial.author"
             class="absolute inset-0"
@@ -74,7 +74,7 @@ onBeforeUnmount(() => {
 
         <div class="mt-6 flex items-center justify-center gap-2 sm:justify-start" aria-label="Testimonial navigation">
           <button
-            v-for="(testimonial, index) in testimonials"
+            v-for="(testimonial, index) in content.testimonials"
             :key="testimonial.author + '-dot'"
             type="button"
             class="h-2.5 rounded-full transition-all duration-300"

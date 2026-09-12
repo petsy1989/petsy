@@ -1,25 +1,25 @@
 <script setup lang="ts">
 import SectionHeading from './SectionHeading.vue'
 import WhatsAppButton from './WhatsAppButton.vue'
-import { services } from '@/data/site'
+import { content } from '@/i18n'
 </script>
 
 <template>
   <section id="services" class="bg-shell py-20 sm:py-28 lg:py-32">
     <div class="mx-auto max-w-6xl px-5 sm:px-8">
-      <SectionHeading :eyebrow="services.eyebrow" :heading="services.heading">
+      <SectionHeading :eyebrow="content.services.eyebrow" :heading="content.services.heading">
         <p class="mt-5 max-w-xl text-[1.04rem] leading-relaxed text-ink/70">
-          {{ services.body }}
+          {{ content.services.body }}
         </p>
       </SectionHeading>
 
       <!-- Plans -->
       <div
         class="mt-12 grid gap-5 lg:mt-16 lg:gap-7"
-        :class="services.plans.length === 2 ? 'lg:grid-cols-2' : 'lg:grid-cols-3'"
+        :class="content.services.plans.length === 2 ? 'lg:grid-cols-2' : 'lg:grid-cols-3'"
       >
         <article
-          v-for="plan in services.plans"
+          v-for="plan in content.services.plans"
           :key="plan.name"
           class="relative flex flex-col rounded-[1.75rem] p-7 transition-transform duration-200 sm:p-8"
           :class="
@@ -32,7 +32,7 @@ import { services } from '@/data/site'
             v-if="plan.featured"
             class="absolute -top-3 right-7 rounded-full bg-butter px-3 py-1 text-[0.72rem] font-semibold tracking-[0.1em] text-ink uppercase"
           >
-            Most booked
+            {{ content.services.mostBooked }}
           </span>
 
           <h3 class="font-display text-2xl font-semibold">{{ plan.name }}</h3>
@@ -76,7 +76,7 @@ import { services } from '@/data/site'
           <WhatsAppButton
             class="mt-8 w-full justify-center"
             :variant="plan.featured ? 'cream' : 'solid'"
-            label="Ask about this plan"
+            :label="content.services.askAbout"
           />
         </article>
       </div>
@@ -84,12 +84,12 @@ import { services } from '@/data/site'
       <!-- One-offs -->
       <div class="mt-14 rounded-[1.75rem] bg-butter p-7 sm:p-9 lg:mt-16">
         <h3 class="font-display text-2xl font-semibold text-ink">
-          {{ services.alaCarteHeading }}
+          {{ content.services.alaCarteHeading }}
         </h3>
 
         <ul class="mt-6 grid gap-x-10 sm:grid-cols-2">
           <li
-            v-for="item in services.alaCarte"
+            v-for="item in content.services.alaCarte"
             :key="item.name"
             class="flex items-baseline justify-between gap-4 border-b border-ink/12 py-3.5"
           >
@@ -104,7 +104,7 @@ import { services } from '@/data/site'
         </ul>
 
         <p class="mt-6 max-w-2xl text-[0.88rem] leading-relaxed text-ink/60">
-          {{ services.footnote }}
+          {{ content.services.footnote }}
         </p>
       </div>
     </div>

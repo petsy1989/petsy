@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { marqueeWords } from '@/data/site'
+import { computed } from 'vue'
+import { content } from '@/i18n'
 
 // Rendered twice back-to-back so the -50% translate loops seamlessly.
-const loop = [...marqueeWords, ...marqueeWords]
+const loop = computed(() => [...content.value.marquee, ...content.value.marquee])
 </script>
 
 <template>

@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { asset } from '@/lib/asset'
+import { business } from '@/data/site'
+import { content } from '@/i18n'
 
-const ownerEmail = 'acomecome@gmail.com'
+const ownerEmail = business.email
 const submitted = ref(false)
 const submitting = ref(false)
 const submitError = ref(false)
@@ -35,16 +37,9 @@ const form = reactive({
   additionalNotes: '',
 })
 
-const concernOptions = [
-  'Resource guarding',
-  'Separation anxiety',
-  'Prey drive',
-  'Escape attempts',
-  'None of these',
-]
-
 function joinValue(value: string | string[]) {
-  return Array.isArray(value) ? value.join(', ') || 'Not provided' : value || 'Not provided'
+  const empty = content.value.intake.notProvided
+  return Array.isArray(value) ? value.join(', ') || empty : value || empty
 }
 
 function resetForm() {
@@ -80,32 +75,33 @@ function resetForm() {
 }
 
 async function submitForm() {
-  const fields = [
-    ['Owner name', form.ownerName],
-    ['Owner phone', form.ownerPhone],
-    ['Dog name', form.dogName],
-    ['Breed', form.breed],
-    ['Age', form.age],
-    ['Sex', form.sex],
-    ['Spay/neuter status', form.altered],
-    ['Vet clinic', form.vetClinic],
-    ['Vet contact', form.vetContact],
-    ['Behaviour with unfamiliar people', form.peopleBehaviour],
-    ['Behaviour with unfamiliar dogs', form.dogBehaviour],
-    ['Other behaviour notes', form.otherBehaviour],
-    ['Off-leash experience', form.offLeash],
-    ['Behaviour concerns', form.concerns],
-    ['History of growling, snapping or biting', form.biteHistory],
-    ['Bite history details', form.biteDetails],
-    ['Fears and triggers', form.triggers],
-    ['Time home alone', form.homeAlone],
-    ['Medical conditions, allergies or special needs', form.medicalNeeds],
-    ['Medications', form.medications],
-    ['Favourite activities', form.favoriteActivities],
-    ['Treat permissions', form.treats],
-    ['Foods or treats to avoid', form.avoidFoods],
-    ['Three words to describe your dog', form.personality],
-    ['Additional comfort information', form.additionalNotes],
+  const labels = content.value.intake.emailLabels
+  const fields: [string, string | string[]][] = [
+    [labels.ownerName, form.ownerName],
+    [labels.ownerPhone, form.ownerPhone],
+    [labels.dogName, form.dogName],
+    [labels.breed, form.breed],
+    [labels.age, form.age],
+    [labels.sex, form.sex],
+    [labels.altered, form.altered],
+    [labels.vetClinic, form.vetClinic],
+    [labels.vetContact, form.vetContact],
+    [labels.peopleBehaviour, form.peopleBehaviour],
+    [labels.dogBehaviour, form.dogBehaviour],
+    [labels.otherBehaviour, form.otherBehaviour],
+    [labels.offLeash, form.offLeash],
+    [labels.concerns, form.concerns],
+    [labels.biteHistory, form.biteHistory],
+    [labels.biteDetails, form.biteDetails],
+    [labels.triggers, form.triggers],
+    [labels.homeAlone, form.homeAlone],
+    [labels.medicalNeeds, form.medicalNeeds],
+    [labels.medications, form.medications],
+    [labels.favoriteActivities, form.favoriteActivities],
+    [labels.treats, form.treats],
+    [labels.avoidFoods, form.avoidFoods],
+    [labels.personality, form.personality],
+    [labels.additionalNotes, form.additionalNotes],
   ]
 
   const body = fields.map(([label, value]) => `${label}: ${joinValue(value)}`).join('\n\n')
@@ -121,7 +117,7 @@ async function submitForm() {
         Accept: 'application/json',
       },
       body: JSON.stringify({
-        _subject: `New intake form for ${form.dogName}`,
+        _subject: content.value.intake.emailSubject.replace('{dogName}', form.dogName),
         _template: 'box',
         _captcha: 'false',
         message: body,
@@ -145,17 +141,17 @@ async function submitForm() {
         <div class="relative h-[22rem] w-full sm:h-[28rem]">
           <img
             :src="asset('/images/contact-dog-shelter.jpg')"
-            alt="Paige spending time with dogs"
+            :alt="content.intake.imageAlt"
             class="absolute inset-0 h-full w-full object-cover"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-ink/75 via-ink/20 to-transparent" />
         </div>
 
         <div class="px-6 py-10 sm:px-10 sm:py-14 lg:px-14">
-          <p class="text-xs font-medium tracking-[0.18em] text-moss uppercase">Intake form</p>
-          <h2 class="mt-3 text-4xl leading-tight sm:text-5xl">Tell me about your dog.</h2>
+          <p class="text-xs font-medium tracking-[0.18em] text-moss uppercase">{{ content.intake.eyebrow }}</p>
+          <h2 class="mt-3 text-4xl leading-tight sm:text-5xl">{{ content.intake.heading }}</h2>
           <p class="mt-5 max-w-xl leading-relaxed text-ink/65">
-            Share a little about your dog so I can understand their routines, personality, and what helps them feel comfortable.
+            {{ content.intake.intro }}
           </p>
 
           <div v-if="submitted" class="mt-10 flex flex-col items-center py-10 text-center sm:py-16">
@@ -171,80 +167,80 @@ async function submitForm() {
                 <ellipse cx="14.6" cy="5.6" rx="1.9" ry="2.4" fill="currentColor" />
               </svg>
             </span>
-            <h3 class="mt-6 font-display text-3xl sm:text-4xl">Thank you!</h3>
+            <h3 class="mt-6 font-display text-3xl sm:text-4xl">{{ content.intake.thankYou }}</h3>
             <p class="mt-4 max-w-md leading-relaxed text-ink/65">
-              Your intake form has been sent. Paige will be in touch soon.
+              {{ content.intake.submittedBody }}
             </p>
             <button
               type="button"
               class="mt-8 rounded-full bg-forest px-7 py-3.5 text-sm font-medium text-cream transition-transform hover:-translate-y-0.5"
               @click="resetForm"
             >
-              Send another intake form
+              {{ content.intake.sendAnother }}
             </button>
           </div>
 
           <form v-else class="mt-10 space-y-10" @submit.prevent="submitForm">
             <fieldset class="space-y-5">
-              <legend class="font-display text-2xl">Your details</legend>
+              <legend class="font-display text-2xl">{{ content.intake.sections.yourDetails }}</legend>
               <div class="grid gap-5 sm:grid-cols-2">
-                <label class="field">Your name <input v-model="form.ownerName" required type="text" autocomplete="name" /></label>
-                <label class="field">Phone number <input v-model="form.ownerPhone" required type="tel" autocomplete="tel" /></label>
+                <label class="field">{{ content.intake.fields.ownerName }} <input v-model="form.ownerName" required type="text" autocomplete="name" /></label>
+                <label class="field">{{ content.intake.fields.ownerPhone }} <input v-model="form.ownerPhone" required type="tel" autocomplete="tel" /></label>
               </div>
             </fieldset>
 
             <fieldset class="space-y-5">
-              <legend class="font-display text-2xl">About your dog</legend>
+              <legend class="font-display text-2xl">{{ content.intake.sections.aboutDog }}</legend>
               <div class="grid gap-5 sm:grid-cols-2">
-                <label class="field">Dog’s name <input v-model="form.dogName" required type="text" /></label>
-                <label class="field">Breed <input v-model="form.breed" required type="text" /></label>
-                <label class="field">Age <input v-model="form.age" required type="text" placeholder="For example, 3 years" /></label>
-                <label class="field">Sex <select v-model="form.sex" required><option value="" disabled>Select one</option><option>Female</option><option>Male</option><option>Prefer not to say</option></select></label>
-                <label class="field sm:col-span-2">Spay/neuter status <select v-model="form.altered" required><option value="" disabled>Select one</option><option>Spayed/neutered</option><option>Not spayed/neutered</option><option>Not applicable</option></select></label>
+                <label class="field">{{ content.intake.fields.dogName }} <input v-model="form.dogName" required type="text" /></label>
+                <label class="field">{{ content.intake.fields.breed }} <input v-model="form.breed" required type="text" /></label>
+                <label class="field">{{ content.intake.fields.age }} <input v-model="form.age" required type="text" :placeholder="content.intake.fields.agePlaceholder" /></label>
+                <label class="field">{{ content.intake.fields.sex }} <select v-model="form.sex" required><option value="" disabled>{{ content.intake.selectOne }}</option><option v-for="opt in content.intake.sexOptions" :key="opt">{{ opt }}</option></select></label>
+                <label class="field sm:col-span-2">{{ content.intake.fields.altered }} <select v-model="form.altered" required><option value="" disabled>{{ content.intake.selectOne }}</option><option v-for="opt in content.intake.alteredOptions" :key="opt">{{ opt }}</option></select></label>
               </div>
             </fieldset>
 
             <fieldset class="space-y-5">
-              <legend class="font-display text-2xl">Veterinary care</legend>
+              <legend class="font-display text-2xl">{{ content.intake.sections.vetCare }}</legend>
               <div class="grid gap-5 sm:grid-cols-2">
-                <label class="field">Vet clinic <input v-model="form.vetClinic" type="text" /></label>
-                <label class="field">Vet contact information <input v-model="form.vetContact" type="text" /></label>
+                <label class="field">{{ content.intake.fields.vetClinic }} <input v-model="form.vetClinic" type="text" /></label>
+                <label class="field">{{ content.intake.fields.vetContact }} <input v-model="form.vetContact" type="text" /></label>
               </div>
             </fieldset>
 
             <fieldset class="space-y-5">
-              <legend class="font-display text-2xl">Behaviour and socialization</legend>
+              <legend class="font-display text-2xl">{{ content.intake.sections.behaviour }}</legend>
               <div class="grid gap-5 sm:grid-cols-2">
-                <label class="field">How are they with unfamiliar people? <textarea v-model="form.peopleBehaviour" rows="3" /></label>
-                <label class="field">How are they with unfamiliar dogs? <textarea v-model="form.dogBehaviour" rows="3" /></label>
-                <label class="field sm:col-span-2">Anything else about their behaviour? <textarea v-model="form.otherBehaviour" rows="3" /></label>
+                <label class="field">{{ content.intake.fields.peopleBehaviour }} <textarea v-model="form.peopleBehaviour" rows="3" /></label>
+                <label class="field">{{ content.intake.fields.dogBehaviour }} <textarea v-model="form.dogBehaviour" rows="3" /></label>
+                <label class="field sm:col-span-2">{{ content.intake.fields.otherBehaviour }} <textarea v-model="form.otherBehaviour" rows="3" /></label>
               </div>
-              <label class="field">Have they spent time off leash? <textarea v-model="form.offLeash" rows="2" /></label>
+              <label class="field">{{ content.intake.fields.offLeash }} <textarea v-model="form.offLeash" rows="2" /></label>
               <div>
-                <p class="mb-3 text-sm font-medium">Do any of these apply?</p>
+                <p class="mb-3 text-sm font-medium">{{ content.intake.fields.concernsPrompt }}</p>
                 <div class="grid gap-3 sm:grid-cols-2">
-                  <label v-for="option in concernOptions" :key="option" class="check-field">
+                  <label v-for="option in content.intake.concernOptions" :key="option" class="check-field">
                     <input v-model="form.concerns" type="checkbox" :value="option" />
                     <span>{{ option }}</span>
                   </label>
                 </div>
               </div>
-              <label class="field">Any history of growling, snapping, or biting? <textarea v-model="form.biteHistory" rows="2" /></label>
-              <label class="field">Please explain any incidents or concerns <textarea v-model="form.biteDetails" rows="3" /></label>
-              <label class="field">What fears or triggers should I know about? <textarea v-model="form.triggers" rows="3" placeholder="Please include examples and helpful ways to support them." /></label>
+              <label class="field">{{ content.intake.fields.biteHistory }} <textarea v-model="form.biteHistory" rows="2" /></label>
+              <label class="field">{{ content.intake.fields.biteDetails }} <textarea v-model="form.biteDetails" rows="3" /></label>
+              <label class="field">{{ content.intake.fields.triggers }} <textarea v-model="form.triggers" rows="3" :placeholder="content.intake.fields.triggersPlaceholder" /></label>
             </fieldset>
 
             <fieldset class="space-y-5">
-              <legend class="font-display text-2xl">Care and comfort</legend>
+              <legend class="font-display text-2xl">{{ content.intake.sections.careComfort }}</legend>
               <div class="grid gap-5 sm:grid-cols-2">
-                <label class="field">How long can they be home alone? <input v-model="form.homeAlone" type="text" /></label>
-                <label class="field">Favourite activities <input v-model="form.favoriteActivities" type="text" /></label>
-                <label class="field sm:col-span-2">Medical conditions, allergies, or special needs <textarea v-model="form.medicalNeeds" rows="3" /></label>
-                <label class="field sm:col-span-2">Medications and instructions <textarea v-model="form.medications" rows="3" /></label>
-                <label class="field sm:col-span-2">May I offer treats? What kind and how often? <textarea v-model="form.treats" rows="3" /></label>
-                <label class="field sm:col-span-2">Foods or treats to avoid <textarea v-model="form.avoidFoods" rows="2" /></label>
-                <label class="field sm:col-span-2">Three words to describe your dog <input v-model="form.personality" type="text" /></label>
-                <label class="field sm:col-span-2">Anything else that would help them feel at home? <textarea v-model="form.additionalNotes" rows="4" /></label>
+                <label class="field">{{ content.intake.fields.homeAlone }} <input v-model="form.homeAlone" type="text" /></label>
+                <label class="field">{{ content.intake.fields.favoriteActivities }} <input v-model="form.favoriteActivities" type="text" /></label>
+                <label class="field sm:col-span-2">{{ content.intake.fields.medicalNeeds }} <textarea v-model="form.medicalNeeds" rows="3" /></label>
+                <label class="field sm:col-span-2">{{ content.intake.fields.medications }} <textarea v-model="form.medications" rows="3" /></label>
+                <label class="field sm:col-span-2">{{ content.intake.fields.treats }} <textarea v-model="form.treats" rows="3" /></label>
+                <label class="field sm:col-span-2">{{ content.intake.fields.avoidFoods }} <textarea v-model="form.avoidFoods" rows="2" /></label>
+                <label class="field sm:col-span-2">{{ content.intake.fields.personality }} <input v-model="form.personality" type="text" /></label>
+                <label class="field sm:col-span-2">{{ content.intake.fields.additionalNotes }} <textarea v-model="form.additionalNotes" rows="4" /></label>
               </div>
             </fieldset>
 
@@ -254,14 +250,14 @@ async function submitForm() {
                 :disabled="submitting"
                 class="rounded-full bg-forest px-7 py-3.5 text-sm font-medium text-cream transition-transform hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
               >
-                {{ submitting ? 'Sending…' : 'Send my intake form' }}
+                {{ submitting ? content.intake.submitting : content.intake.submit }}
               </button>
               <p class="text-sm leading-relaxed text-ink/55">
-                Your answers are sent straight to Paige’s inbox.
+                {{ content.intake.submitNote }}
               </p>
             </div>
             <p v-if="submitError" class="rounded-2xl bg-blush/40 px-5 py-4 text-sm text-ink/75" role="alert">
-              Something went wrong while sending. Please try again, or email {{ ownerEmail }} directly.
+              {{ content.intake.submitError.replace('{email}', ownerEmail) }}
             </p>
           </form>
         </div>

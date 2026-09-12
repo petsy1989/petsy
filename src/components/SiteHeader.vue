@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import BrandLogo from './BrandLogo.vue'
+import LanguageSwitch from './LanguageSwitch.vue'
 import WhatsAppButton from './WhatsAppButton.vue'
-import { navLinks } from '@/data/site'
+import { content } from '@/i18n'
 
 const scrolled = ref(false)
 const menuOpen = ref(false)
@@ -42,14 +43,15 @@ onBeforeUnmount(() => {
 
       <nav class="hidden items-center gap-9 md:flex" aria-label="Main">
         <a
-          v-for="link in navLinks"
+          v-for="link in content.nav"
           :key="link.href"
           :href="link.href"
           class="text-[0.95rem] font-medium text-ink/70 transition-colors hover:text-ink"
         >
           {{ link.label }}
         </a>
-        <WhatsAppButton size="sm" label="Text me" />
+        <LanguageSwitch />
+        <WhatsAppButton size="sm" :label="content.header.textMe" />
       </nav>
 
       <button
@@ -93,7 +95,7 @@ onBeforeUnmount(() => {
         aria-label="Main"
       >
         <ul class="flex flex-col gap-1">
-          <li v-for="link in navLinks" :key="link.href">
+          <li v-for="link in content.nav" :key="link.href">
             <a
               :href="link.href"
               class="block py-3 font-display text-3xl text-ink"
@@ -103,6 +105,7 @@ onBeforeUnmount(() => {
             </a>
           </li>
         </ul>
+        <LanguageSwitch class="mt-5" />
         <WhatsAppButton class="mt-6 w-full justify-center" @click="menuOpen = false" />
       </nav>
     </Transition>

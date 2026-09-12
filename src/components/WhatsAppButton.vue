@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, useAttrs } from 'vue'
 import { whatsappUrl } from '@/data/site'
+import { content } from '@/i18n'
 
 defineOptions({ inheritAttrs: false })
 
@@ -17,8 +18,11 @@ const props = withDefaults(
     /** Inverted styling for use on the dark green panels. */
     variant?: 'solid' | 'cream'
   }>(),
-  { label: 'Text me on WhatsApp', desktopLabel: 'Contact me', desktopHref: '#contact', size: 'md', variant: 'solid' },
+  { label: undefined, desktopLabel: undefined, desktopHref: '#contact', size: 'md', variant: 'solid' },
 )
+
+const label = computed(() => props.label ?? content.value.hero.ctaPrimary)
+const desktopLabel = computed(() => props.desktopLabel ?? content.value.contact.askAnything)
 
 const sizeClasses = computed(
   () =>

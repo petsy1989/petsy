@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import SectionHeading from './SectionHeading.vue'
-import { gallery } from '@/data/site'
+import { content } from '@/i18n'
 </script>
 
 <template>
   <section id="gallery" class="py-20 sm:py-28 lg:py-32">
     <div class="mx-auto max-w-6xl px-5 sm:px-8">
-      <SectionHeading :eyebrow="gallery.eyebrow" :heading="gallery.heading" :show-eyebrow="false" />
+      <SectionHeading :eyebrow="content.gallery.eyebrow" :heading="content.gallery.heading" :show-eyebrow="false" />
 
       <!--
         Even ratios with a single alternating drop — reads like a contact
@@ -14,7 +14,7 @@ import { gallery } from '@/data/site'
       -->
       <div class="mt-12 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4 lg:gap-6">
         <figure
-          v-for="(image, i) in gallery.images"
+          v-for="(image, i) in content.gallery.images"
           :key="image.src"
           class="photo-card"
           :class="[image.ratio, i % 2 === 1 ? 'mt-6 lg:mt-10' : '']"

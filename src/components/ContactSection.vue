@@ -2,10 +2,10 @@
 import { ref } from 'vue'
 import SectionHeading from './SectionHeading.vue'
 import WhatsAppButton from './WhatsAppButton.vue'
-import { business, contact, mailtoUrl, telUrl } from '@/data/site'
-import { asset } from '@/lib/asset'
+import { business, mailtoUrl, telUrl } from '@/data/site'
+import { content, localizePath } from '@/i18n'
 
-const intakeFormUrl = asset('/intake-form/')
+const intakeFormUrl = localizePath('/intake-form/')
 
 const copiedField = ref<'email' | 'phone' | null>(null)
 let copiedTimer: ReturnType<typeof setTimeout> | undefined
@@ -30,15 +30,15 @@ async function copyValue(field: 'email' | 'phone', value: string, event: MouseEv
     <div class="mx-auto max-w-6xl px-5 sm:px-8">
       <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
         <div>
-          <SectionHeading :eyebrow="contact.eyebrow" :heading="contact.heading" invert>
+          <SectionHeading :eyebrow="content.contact.eyebrow" :heading="content.contact.heading" invert>
             <p class="mt-5 max-w-md text-[1.04rem] leading-relaxed text-cream/75">
-              {{ contact.body }}
+              {{ content.contact.body }}
             </p>
           </SectionHeading>
 
-          <WhatsAppButton size="lg" variant="cream" class="mt-9" desktop-label="Ask me anything" :desktop-href="mailtoUrl" />
+          <WhatsAppButton size="lg" variant="cream" class="mt-9" :desktop-label="content.contact.askAnything" :desktop-href="mailtoUrl" />
 
-          <p class="mt-4 text-[0.9rem] text-cream/60">{{ contact.responseNote }}</p>
+          <p class="mt-4 text-[0.9rem] text-cream/60">{{ content.contact.responseNote }}</p>
         </div>
 
         <!-- Details -->
@@ -59,7 +59,7 @@ async function copyValue(field: 'email' | 'phone', value: string, event: MouseEv
                 </svg>
               </span>
               <span class="min-w-0">
-                <span class="block text-[0.78rem] tracking-[0.12em] text-cream/55 uppercase">Email</span>
+                <span class="block text-[0.78rem] tracking-[0.12em] text-cream/55 uppercase">{{ content.contact.emailLabel }}</span>
                 <span class="block truncate text-[1.05rem] font-medium">{{ business.email }}</span>
               </span>
               <span
@@ -70,7 +70,7 @@ async function copyValue(field: 'email' | 'phone', value: string, event: MouseEv
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="text-butter">
                     <path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
-                  <span class="text-butter">Copied</span>
+                  <span class="text-butter">{{ content.contact.copied }}</span>
                 </template>
                 <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none">
                   <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7" />
@@ -100,7 +100,7 @@ async function copyValue(field: 'email' | 'phone', value: string, event: MouseEv
                 </svg>
               </span>
               <span>
-                <span class="block text-[0.78rem] tracking-[0.12em] text-cream/55 uppercase">Phone</span>
+                <span class="block text-[0.78rem] tracking-[0.12em] text-cream/55 uppercase">{{ content.contact.phoneLabel }}</span>
                 <span class="block text-[1.05rem] font-medium">{{ business.phoneDisplay }}</span>
               </span>
               <span
@@ -111,7 +111,7 @@ async function copyValue(field: 'email' | 'phone', value: string, event: MouseEv
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="text-butter">
                     <path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
-                  <span class="text-butter">Copied</span>
+                  <span class="text-butter">{{ content.contact.copied }}</span>
                 </template>
                 <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none">
                   <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.7" />
@@ -138,8 +138,8 @@ async function copyValue(field: 'email' | 'phone', value: string, event: MouseEv
                 </svg>
               </span>
               <span>
-                <span class="block text-[0.78rem] tracking-[0.12em] text-cream/55 uppercase">For new clients</span>
-                <span class="block text-[1.05rem] font-medium">Intake form</span>
+                <span class="block text-[0.78rem] tracking-[0.12em] text-cream/55 uppercase">{{ content.contact.newClientsLabel }}</span>
+                <span class="block text-[1.05rem] font-medium">{{ content.contact.intakeFormLabel }}</span>
               </span>
               <span
                 class="ml-auto shrink-0 text-cream/40 transition-colors group-hover:text-butter"
@@ -175,7 +175,7 @@ async function copyValue(field: 'email' | 'phone', value: string, event: MouseEv
                 </svg>
               </span>
               <span>
-                <span class="block text-[0.78rem] tracking-[0.12em] text-cream/55 uppercase">Service area</span>
+                <span class="block text-[0.78rem] tracking-[0.12em] text-cream/55 uppercase">{{ content.contact.serviceAreaLabel }}</span>
                 <span class="block text-[1.05rem] font-medium">{{ business.serviceArea }}</span>
               </span>
             </div>

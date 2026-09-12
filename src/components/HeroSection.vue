@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import WhatsAppButton from './WhatsAppButton.vue'
-import { hero } from '@/data/site'
+import { content } from '@/i18n'
 import { asset } from '@/lib/asset'
 </script>
 
@@ -22,21 +22,21 @@ import { asset } from '@/lib/asset'
           <h1
             class="font-display text-[2.6rem] leading-[0.98] font-semibold sm:text-6xl sm:leading-[0.96] lg:text-[4.4rem]"
           >
-            {{ hero.headline }}<br />
-            <span class="text-moss italic">{{ hero.headlineAccent }}</span>
+            {{ content.hero.headline }}<br />
+            <span class="text-moss italic">{{ content.hero.headlineAccent }}</span>
           </h1>
 
           <p class="mt-6 max-w-lg text-[1.06rem] leading-relaxed text-ink/70">
-            {{ hero.body }}
+            {{ content.hero.body }}
           </p>
 
           <div class="mt-9 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
-            <WhatsAppButton size="lg" :label="hero.ctaPrimary" class="w-full sm:w-auto justify-center" />
+            <WhatsAppButton size="lg" :label="content.hero.ctaPrimary" class="w-full sm:w-auto justify-center" />
             <a
               href="#services"
               class="inline-flex h-14 items-center gap-2 px-1 text-[1rem] font-medium text-ink underline decoration-ink/25 decoration-1 underline-offset-[6px] transition-colors hover:decoration-ink"
             >
-              {{ hero.ctaSecondary }}
+              {{ content.hero.ctaSecondary }}
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                 <path
                   d="M3.5 8h9m0 0L9 4.5M12.5 8 9 11.5"
@@ -56,7 +56,7 @@ import { asset } from '@/lib/asset'
           <div class="photo-card aspect-[3/4] w-full">
             <img
               :src="asset('/images/hero-dog.jpg')"
-              alt="A golden retriever in a forest-green bandana sitting against a warm cream backdrop"
+              :alt="content.hero.imageAlt"
               width="1200"
               height="1600"
               fetchpriority="high"
@@ -83,8 +83,8 @@ import { asset } from '@/lib/asset'
               </svg>
             </span>
             <span class="text-[0.86rem] leading-tight text-ink/75">
-              Photo update<br />
-              <span class="font-medium text-ink">after every visit</span>
+              {{ content.hero.photoCardTop }}<br />
+              <span class="font-medium text-ink">{{ content.hero.photoCardBottom }}</span>
             </span>
           </div>
         </div>
