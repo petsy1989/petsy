@@ -80,7 +80,7 @@ onBeforeUnmount(() => {
     >
       <ul
         v-if="open"
-        class="absolute left-1/2 top-full z-10 mt-2 -translate-x-1/2 rounded-xl border border-ink/8 bg-cream py-1 shadow-lg shadow-ink/5"
+        class="absolute left-0 top-full z-10 mt-2 rounded-xl border border-ink/8 bg-cream py-1 shadow-lg shadow-ink/5"
         role="listbox"
         aria-label="Language"
       >
