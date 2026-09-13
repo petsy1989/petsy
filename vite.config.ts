@@ -17,7 +17,11 @@ export default defineConfig({
       name: 'locale-prefix-rewrite',
       configureServer(server) {
         server.middlewares.use((req, _res, next) => {
-          if (req.url?.startsWith('/zh/')) {
+          if (req.url?.startsWith('/zh-CN/')) {
+            req.url = req.url.slice(6)
+          } else if (req.url === '/zh-CN') {
+            req.url = '/'
+          } else if (req.url?.startsWith('/zh/')) {
             req.url = req.url.slice(3)
           } else if (req.url === '/zh') {
             req.url = '/'
@@ -27,15 +31,17 @@ export default defineConfig({
       },
     },
     {
-      // Static-host support for the /zh prefix: emit /zh/index.html and
-      // /zh/intake-form/index.html copies so GitHub Pages (or any static
-      // host) resolves them without rewrite rules.
+      // Static-host support for locale prefixes: emit /zh/index.html,
+      // /zh-CN/index.html etc. copies so GitHub Pages (or any static host)
+      // resolves them without rewrite rules.
       name: 'locale-prefix-pages',
       closeBundle() {
         const dist = fileURLToPath(new URL('./dist', import.meta.url))
         const copies: [string, string][] = [
           ['index.html', 'zh/index.html'],
+          ['index.html', 'zh-CN/index.html'],
           ['intake-form/index.html', 'zh/intake-form/index.html'],
+          ['intake-form/index.html', 'zh-CN/intake-form/index.html'],
         ]
         for (const [from, to] of copies) {
           const src = join(dist, from)
