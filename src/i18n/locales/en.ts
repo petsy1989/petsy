@@ -98,9 +98,9 @@ const content = {
         name: 'Daycare',
         tagline: 'Flexible daytime care for dogs who need exercise, enrichment and a routine they can trust.',
         price: '$27',
-        cadence: 'half day (up to 6 hrs)',
+        cadence: 'half day (up to 4.5 hrs)',
         features: [
-          'Full day option: $48 (> 6 hrs)',
+          'Full day option: $48 (up to 12 hours)',
           'Medication & feeding support',
           'Photos & videos update',
           'Nature stroll',
@@ -114,7 +114,7 @@ const content = {
         cadence: 'per 24 hrs',
         featured: true,
         features: [
-          'Additional hours: $5/hr',
+          'Additional hours: $5/hr capped at $48',
           'Flexible check in & check out by appointment',
           'Medication & feeding support',
           'Photos & videos update',
