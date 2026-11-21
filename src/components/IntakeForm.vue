@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { onBeforeUnmount, reactive, ref } from 'vue'
 import { asset } from '@/lib/asset'
 import { business } from '@/data/site'
 import { content } from '@/i18n'
@@ -37,6 +37,63 @@ const form = reactive({
   additionalNotes: '',
 })
 
+const PHOTO_MAX_WIDTH = 1000
+const PHOTO_QUALITY = 0.85
+
+const photo = ref<Blob | null>(null)
+const photoPreview = ref('')
+const photoName = ref('')
+const photoError = ref(false)
+const photoInput = ref<HTMLInputElement | null>(null)
+
+function clearPhoto() {
+  if (photoPreview.value) URL.revokeObjectURL(photoPreview.value)
+  photo.value = null
+  photoPreview.value = ''
+  photoName.value = ''
+  photoError.value = false
+}
+
+/** Scale down to PHOTO_MAX_WIDTH (never up) and re-encode as JPEG. */
+async function resizeToJpeg(file: File): Promise<Blob> {
+  const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' })
+  const scale = Math.min(1, PHOTO_MAX_WIDTH / bitmap.width)
+  const canvas = document.createElement('canvas')
+  canvas.width = Math.round(bitmap.width * scale)
+  canvas.height = Math.round(bitmap.height * scale)
+  const ctx = canvas.getContext('2d')
+  if (!ctx) throw new Error('Canvas unavailable')
+  ctx.fillStyle = '#fff'
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
+  bitmap.close()
+  return new Promise((resolve, reject) =>
+    canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error('Encode failed'))), 'image/jpeg', PHOTO_QUALITY),
+  )
+}
+
+function removePhoto() {
+  clearPhoto()
+  if (photoInput.value) photoInput.value.value = ''
+}
+
+async function onPhotoChange(event: Event) {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  clearPhoto()
+  if (!file) return
+  try {
+    photo.value = await resizeToJpeg(file)
+    photoPreview.value = URL.createObjectURL(photo.value)
+    photoName.value = file.name
+  } catch {
+    photoError.value = true
+    input.value = ''
+  }
+}
+
+onBeforeUnmount(clearPhoto)
+
 function joinValue(value: string | string[]) {
   const empty = content.value.intake.notProvided
   return Array.isArray(value) ? value.join(', ') || empty : value || empty
@@ -70,6 +127,7 @@ function resetForm() {
     personality: '',
     additionalNotes: '',
   })
+  clearPhoto()
   submitted.value = false
   submitError.value = false
 }
@@ -110,18 +168,17 @@ async function submitForm() {
   submitError.value = false
 
   try {
+    const payload = new FormData()
+    payload.append('_subject', content.value.intake.emailSubject.replace('{dogName}', form.dogName))
+    payload.append('_template', 'box')
+    payload.append('_captcha', 'false')
+    payload.append('message', body)
+    if (photo.value) payload.append('photo', photo.value, `${form.dogName.trim() || 'dog'}.jpg`)
+
     const response = await fetch(`https://formsubmit.co/ajax/${ownerEmail}`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify({
-        _subject: content.value.intake.emailSubject.replace('{dogName}', form.dogName),
-        _template: 'box',
-        _captcha: 'false',
-        message: body,
-      }),
+      headers: { Accept: 'application/json' },
+      body: payload,
     })
 
     if (!response.ok) throw new Error('Submission failed')
@@ -196,7 +253,29 @@ async function submitForm() {
                 <label class="field">{{ content.intake.fields.breed }} <input v-model="form.breed" required type="text" /></label>
                 <label class="field">{{ content.intake.fields.age }} <input v-model="form.age" required type="text" :placeholder="content.intake.fields.agePlaceholder" /></label>
                 <label class="field">{{ content.intake.fields.sex }} <select v-model="form.sex" required><option value="" disabled>{{ content.intake.selectOne }}</option><option v-for="opt in content.intake.sexOptions" :key="opt">{{ opt }}</option></select></label>
-                <label class="field sm:col-span-2">{{ content.intake.fields.altered }} <select v-model="form.altered" required><option value="" disabled>{{ content.intake.selectOne }}</option><option v-for="opt in content.intake.alteredOptions" :key="opt">{{ opt }}</option></select></label>
+                <label class="field">{{ content.intake.fields.altered }} <select v-model="form.altered" required><option value="" disabled>{{ content.intake.selectOne }}</option><option v-for="opt in content.intake.alteredOptions" :key="opt">{{ opt }}</option></select></label>
+                <div class="field">
+                  <span>{{ content.intake.fields.photo }}</span>
+                  <input ref="photoInput" type="file" accept="image/*" class="hidden" @change="onPhotoChange" />
+                  <div class="relative">
+                    <button type="button" class="photo-btn" :class="{ 'has-file': photoPreview }" :title="photoName || undefined" @click="photoInput?.click()">
+                      <img v-if="photoPreview" :src="photoPreview" alt="" class="h-6 w-6 shrink-0 rounded-md object-cover" />
+                      <span v-else class="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-ink/10 text-ink/35" aria-hidden="true">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <rect x="3" y="3" width="18" height="18" rx="2" />
+                          <circle cx="9" cy="9" r="1.6" />
+                          <path d="m21 15-4.5-4.5L6 21" />
+                        </svg>
+                      </span>
+                      <span class="min-w-0 flex-1 truncate" :class="{ 'text-ink/45': !photoPreview }">{{ photoName || content.intake.fields.photoPlaceholder }}</span>
+                      <span v-if="!photoPreview" class="shrink-0 text-xs font-medium text-forest underline underline-offset-2">{{ content.intake.fields.photoUpload }}</span>
+                    </button>
+                    <button v-if="photoPreview" type="button" class="absolute top-1/2 right-4 -translate-y-1/2 text-xs underline underline-offset-2" @click="removePhoto">
+                      {{ content.intake.fields.photoRemove }}
+                    </button>
+                  </div>
+                  <span v-if="photoError" class="text-xs text-ink/75" role="alert">{{ content.intake.fields.photoError }}</span>
+                </div>
               </div>
             </fieldset>
 
@@ -290,6 +369,32 @@ async function submitForm() {
 
 .field textarea {
   resize: vertical;
+}
+
+.photo-btn {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.6rem;
+  border: 1px solid rgb(38 48 31 / 0.14);
+  border-radius: 0.9rem;
+  background: rgb(253 248 237 / 0.75);
+  padding: 0.75rem 0.9rem;
+  color: #26301f;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.photo-btn.has-file {
+  padding-right: 4.75rem;
+}
+
+.photo-btn:hover,
+.photo-btn:focus-visible {
+  border-color: #3d4b35;
+  outline: none;
 }
 
 .field input:focus,
