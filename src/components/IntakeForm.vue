@@ -168,18 +168,25 @@ async function submitForm() {
   submitError.value = false
 
   try {
-    const payload = new FormData()
-    payload.append('_subject', content.value.intake.emailSubject.replace('{dogName}', form.dogName))
-    payload.append('_template', 'box')
-    payload.append('_captcha', 'false')
-    payload.append('message', body)
-    if (photo.value) payload.append('photo', photo.value, `${form.dogName.trim() || 'dog'}.jpg`)
+    const subject = content.value.intake.emailSubject.replace('{dogName}', form.dogName)
+    let response: Response
 
-    const response = await fetch(`https://formsubmit.co/ajax/${ownerEmail}`, {
-      method: 'POST',
-      headers: { Accept: 'application/json' },
-      body: payload,
-    })
+    if (photo.value) {
+      // FormSubmit only attaches files on its native endpoint (multipart, field named "attachment").
+      const payload = new FormData()
+      payload.append('_subject', subject)
+      payload.append('_template', 'box')
+      payload.append('_captcha', 'false')
+      payload.append('message', body)
+      payload.append('attachment', photo.value, `${form.dogName.trim() || 'dog'}.jpg`)
+      response = await fetch(`https://formsubmit.co/${ownerEmail}`, { method: 'POST', body: payload })
+    } else {
+      response = await fetch(`https://formsubmit.co/ajax/${ownerEmail}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ _subject: subject, _template: 'box', _captcha: 'false', message: body }),
+      })
+    }
 
     if (!response.ok) throw new Error('Submission failed')
     submitted.value = true
