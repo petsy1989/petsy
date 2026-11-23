@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { onBeforeUnmount, reactive, ref } from 'vue'
+import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 import { asset } from '@/lib/asset'
 import { business } from '@/data/site'
-import { content } from '@/i18n'
+import { content, locale } from '@/i18n'
 
 const ownerEmail = business.email
 const submitted = ref(false)
@@ -14,7 +14,9 @@ const form = reactive({
   ownerPhone: '',
   dogName: '',
   breed: '',
-  age: '',
+  dobYear: '',
+  dobMonth: '',
+  dobDay: '',
   sex: '',
   altered: '',
   vetClinic: '',
@@ -94,6 +96,50 @@ async function onPhotoChange(event: Event) {
 
 onBeforeUnmount(clearPhoto)
 
+const now = new Date()
+const MAX_DOG_AGE = 30
+const monthTag = { en: 'en', zh: 'zh-TW', 'zh-CN': 'zh-CN' } as const
+
+const yearOptions = Array.from({ length: MAX_DOG_AGE + 1 }, (_, i) => now.getFullYear() - i)
+
+const monthOptions = computed(() => {
+  const last = Number(form.dobYear) === now.getFullYear() ? now.getMonth() + 1 : 12
+  const fmt = new Intl.DateTimeFormat(monthTag[locale.value], { month: 'short' })
+  return Array.from({ length: last }, (_, i) => ({ value: i + 1, label: fmt.format(new Date(2000, i, 1)) }))
+})
+
+const dayOptions = computed(() => {
+  const y = Number(form.dobYear)
+  const m = Number(form.dobMonth)
+  let last = y && m ? new Date(y, m, 0).getDate() : 31
+  if (y === now.getFullYear() && m === now.getMonth() + 1) last = Math.min(last, now.getDate())
+  return Array.from({ length: last }, (_, i) => i + 1)
+})
+
+// Drop a month/day that is no longer valid after the year or month changes.
+watch(
+  () => [form.dobYear, form.dobMonth],
+  () => {
+    if (form.dobMonth && Number(form.dobMonth) > monthOptions.value.length) form.dobMonth = ''
+    if (form.dobDay && Number(form.dobDay) > dayOptions.value.length) form.dobDay = ''
+  },
+)
+
+const dateOfBirth = computed(() =>
+  form.dobYear && form.dobMonth && form.dobDay
+    ? `${form.dobYear}-${String(form.dobMonth).padStart(2, '0')}-${String(form.dobDay).padStart(2, '0')}`
+    : '',
+)
+
+/** Age as e.g. "3y 6m" from a YYYY-MM-DD date of birth. */
+function ageFrom(dob: string) {
+  const [y, m, d] = dob.split('-').map(Number)
+  let months = (now.getFullYear() - y) * 12 + (now.getMonth() + 1 - m)
+  if (now.getDate() < d) months -= 1
+  months = Math.max(months, 0)
+  return `${Math.floor(months / 12)}y ${months % 12}m`
+}
+
 function joinValue(value: string | string[]) {
   const empty = content.value.intake.notProvided
   return Array.isArray(value) ? value.join(', ') || empty : value || empty
@@ -105,7 +151,9 @@ function resetForm() {
     ownerPhone: '',
     dogName: '',
     breed: '',
-    age: '',
+    dobYear: '',
+    dobMonth: '',
+    dobDay: '',
     sex: '',
     altered: '',
     vetClinic: '',
@@ -139,7 +187,7 @@ async function submitForm() {
     [labels.ownerPhone, form.ownerPhone],
     [labels.dogName, form.dogName],
     [labels.breed, form.breed],
-    [labels.age, form.age],
+    [labels.dateOfBirth, dateOfBirth.value ? `${dateOfBirth.value} (${ageFrom(dateOfBirth.value)})` : ''],
     [labels.sex, form.sex],
     [labels.altered, form.altered],
     [labels.vetClinic, form.vetClinic],
@@ -258,7 +306,23 @@ async function submitForm() {
               <div class="grid gap-5 sm:grid-cols-2">
                 <label class="field">{{ content.intake.fields.dogName }} <input v-model="form.dogName" required type="text" /></label>
                 <label class="field">{{ content.intake.fields.breed }} <input v-model="form.breed" required type="text" /></label>
-                <label class="field">{{ content.intake.fields.age }} <input v-model="form.age" required type="text" :placeholder="content.intake.fields.agePlaceholder" /></label>
+                <div class="field">
+                  <span>{{ content.intake.fields.dateOfBirth }}</span>
+                  <div class="dob grid grid-cols-3 gap-2">
+                    <select v-model="form.dobYear" required :aria-label="content.intake.fields.dobYear">
+                      <option value="" disabled>{{ content.intake.fields.dobYear }}</option>
+                      <option v-for="y in yearOptions" :key="y" :value="String(y)">{{ y }}</option>
+                    </select>
+                    <select v-model="form.dobMonth" required :aria-label="content.intake.fields.dobMonth">
+                      <option value="" disabled>{{ content.intake.fields.dobMonth }}</option>
+                      <option v-for="m in monthOptions" :key="m.value" :value="String(m.value)">{{ m.label }}</option>
+                    </select>
+                    <select v-model="form.dobDay" required :aria-label="content.intake.fields.dobDay">
+                      <option value="" disabled>{{ content.intake.fields.dobDay }}</option>
+                      <option v-for="d in dayOptions" :key="d" :value="String(d)">{{ d }}</option>
+                    </select>
+                  </div>
+                </div>
                 <label class="field">{{ content.intake.fields.sex }} <select v-model="form.sex" required><option value="" disabled>{{ content.intake.selectOne }}</option><option v-for="opt in content.intake.sexOptions" :key="opt">{{ opt }}</option></select></label>
                 <label class="field">{{ content.intake.fields.altered }} <select v-model="form.altered" required><option value="" disabled>{{ content.intake.selectOne }}</option><option v-for="opt in content.intake.alteredOptions" :key="opt">{{ opt }}</option></select></label>
                 <div class="field">
@@ -376,6 +440,12 @@ async function submitForm() {
 
 .field textarea {
   resize: vertical;
+}
+
+.dob select {
+  padding-left: 0.7rem;
+  padding-right: 1.8rem;
+  background-position: right 0.6rem center;
 }
 
 .field select {
