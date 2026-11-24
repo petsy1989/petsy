@@ -27,7 +27,6 @@ const form = reactive({
   concerns: [] as string[],
   biteHistory: '',
   biteDetails: '',
-  triggers: '',
   homeAlone: '',
   favoriteActivities: '',
   personality: '',
@@ -179,7 +178,6 @@ function resetForm() {
     concerns: [],
     biteHistory: '',
     biteDetails: '',
-    triggers: '',
     homeAlone: '',
     favoriteActivities: '',
     personality: '',
@@ -205,8 +203,7 @@ async function submitForm() {
     [labels.vetContact, form.vetContact],
     [labels.concerns, form.concerns],
     [labels.biteHistory, form.biteHistory],
-    [labels.biteDetails, form.biteDetails],
-    [labels.triggers, form.triggers],
+    [labels.biteDetails, form.biteHistory === content.value.intake.biteOptions[0] ? form.biteDetails : ''],
     ...content.value.intake.habits.flatMap((section) =>
       section.questions.map((q): [string, string] => [q.label, habitAnswer(q)]),
     ),
@@ -394,9 +391,19 @@ async function submitForm() {
                   </label>
                 </div>
               </div>
-              <label class="field">{{ content.intake.fields.biteHistory }} <textarea v-model="form.biteHistory" rows="2" /></label>
-              <label class="field">{{ content.intake.fields.biteDetails }} <textarea v-model="form.biteDetails" rows="3" /></label>
-              <label class="field">{{ content.intake.fields.triggers }} <textarea v-model="form.triggers" rows="3" :placeholder="content.intake.fields.triggersPlaceholder" /></label>
+              <div class="grid gap-5 sm:grid-cols-2">
+                <label class="field">
+                  {{ content.intake.fields.biteHistory }}
+                  <select v-model="form.biteHistory">
+                    <option value="">{{ content.intake.selectOne }}</option>
+                    <option v-for="opt in content.intake.biteOptions" :key="opt">{{ opt }}</option>
+                  </select>
+                </label>
+                <label v-if="form.biteHistory === content.intake.biteOptions[0]" class="field sm:col-span-2">
+                  {{ content.intake.fields.biteDetails }}
+                  <textarea v-model="form.biteDetails" rows="3" />
+                </label>
+              </div>
             </fieldset>
 
             <fieldset v-for="section in content.intake.habits" :key="section.title" class="space-y-5">
