@@ -321,7 +321,7 @@ const content = {
       },
     ] as HabitQuestion[],
     selectOne: 'Select one',
-    sexOptions: ['Female', 'Male', 'Prefer not to say'],
+    sexOptions: ['Female', 'Male'],
     alteredOptions: ['Spayed/neutered', 'Not spayed/neutered', 'Not applicable'],
     concernOptions: [
       'Resource guarding',

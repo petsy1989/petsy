@@ -294,7 +294,7 @@ const content = {
       },
     ],
     selectOne: '请选择',
-    sexOptions: ['母', '公', '不便透露'],
+    sexOptions: ['母', '公'],
     alteredOptions: ['已结扎', '未结扎', '不适用'],
     concernOptions: [
       '护食行为',

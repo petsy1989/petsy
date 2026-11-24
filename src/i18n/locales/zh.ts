@@ -293,7 +293,7 @@ const content = {
       },
     ],
     selectOne: '請選擇',
-    sexOptions: ['母', '公', '不便透露'],
+    sexOptions: ['母', '公'],
     alteredOptions: ['已結紮', '未結紮', '不適用'],
     concernOptions: [
       '護食行為',
