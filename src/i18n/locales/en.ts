@@ -5,6 +5,21 @@
 
 import { asset } from '@/lib/asset'
 
+export interface HabitQuestion {
+  key: string
+  label: string
+  options?: string[]
+  placeholder?: string
+  /** Extra answer shown when the selected option is one of `when`. */
+  detail?: { when: string[]; label: string; options?: string[] }
+}
+
+export interface HabitSection {
+  title: string
+  note?: string
+  questions: HabitQuestion[]
+}
+
 export interface ServicePlan {
   name: string
   tagline: string
@@ -200,10 +215,6 @@ const content = {
       altered: 'Spay/neuter status',
       vetClinic: 'Vet clinic',
       vetContact: 'Vet contact information',
-      peopleBehaviour: 'How are they with unfamiliar people?',
-      dogBehaviour: 'How are they with unfamiliar dogs?',
-      otherBehaviour: 'Anything else about their behaviour?',
-      offLeash: 'Have they spent time off leash?',
       concernsPrompt: 'Do any of these apply?',
       biteHistory: 'Any history of growling, snapping, or biting?',
       biteDetails: 'Please explain any incidents or concerns',
@@ -211,10 +222,6 @@ const content = {
       triggersPlaceholder: 'Please include examples and helpful ways to support them.',
       homeAlone: 'How long can they be home alone?',
       favoriteActivities: 'Favourite activities',
-      medicalNeeds: 'Medical conditions, allergies, or special needs',
-      medications: 'Medications and instructions',
-      treats: 'May I offer treats? What kind and how often?',
-      avoidFoods: 'Foods or treats to avoid',
       personality: 'Three words to describe your dog',
       additionalNotes: 'Anything else that would help them feel at home?',
       photo: 'Photo of your dog',
@@ -223,6 +230,104 @@ const content = {
       photoRemove: 'Remove',
       photoError: 'That photo couldn’t be read. Please try a JPEG or PNG.',
     },
+    habits: [
+      {
+        title: 'Feeding instructions',
+        note: 'If you are providing food.',
+        questions: [
+          {
+            key: 'feedTimes',
+            label: 'How many times a day should your dog be fed?',
+            options: ['1', '2', '3'],
+          },
+          {
+            key: 'feedAmount',
+            label: 'How much food does your dog usually eat per meal? (For example, ½ cup, 100 g, or pre-portioned meals ready to serve)',
+          },
+        ],
+      },
+      {
+        title: 'Medication and allergies',
+        questions: [
+          {
+            key: 'medication',
+            label: 'Does your dog take any medication or supplements?',
+            options: ['Yes', 'No'],
+            detail: { when: ['Yes'], label: 'If yes, please provide: name of medication or supplement, dosage, and administration time(s) (when should it be given?)' },
+          },
+          {
+            key: 'allergies',
+            label: 'Does your dog have any known allergies or sensitivities?',
+            options: ['Yes', 'No'],
+            detail: { when: ['Yes'], label: 'If yes, please specify' },
+          },
+        ],
+      },
+      {
+        title: 'Walking and outdoor habits',
+        questions: [
+          {
+            key: 'walksPerDay',
+            label: 'How many times does your dog usually go for walks per day?',
+          },
+          {
+            key: 'walkLength',
+            label: 'How long is each walk?',
+          },
+          {
+            key: 'dogPark',
+            label: 'Has your dog been to a dog park before?',
+            options: ['Yes', 'No'],
+            detail: { when: ['Yes'], label: 'If yes, which kind?', options: ['Fenced dog park', 'Off-leash area'] },
+          },
+          {
+            key: 'reactDogs',
+            label: 'How does your dog usually react to other dogs?',
+            options: ['Friendly and social', 'Shy or nervous', 'Excited or overly energetic', 'Reactive (barking, lunging, etc.)', 'Prefers to be alone', 'Other'],
+            detail: { when: ['Other'], label: 'Please specify' },
+          },
+          {
+            key: 'reactPeople',
+            label: 'How does your dog react to unfamiliar people?',
+            options: ['Friendly', 'Shy or nervous', 'Excited', 'Fearful or reactive', 'Other'],
+            detail: { when: ['Other'], label: 'Please specify' },
+          },
+        ],
+      },
+      {
+        title: 'Potty habits',
+        questions: [
+          {
+            key: 'pottyTrained',
+            label: 'Is your dog fully potty-trained?',
+            options: ['Yes', 'Mostly', 'Still in training'],
+            detail: { when: ['Mostly', 'Still in training'], label: 'Please provide details' },
+          },
+          {
+            key: 'pottyFreq',
+            label: 'How often does your dog usually need potty breaks?',
+            options: ['Rarely', 'Sometimes', 'Often'],
+          },
+          {
+            key: 'pottyWhere',
+            label: 'Where does your dog usually go potty?',
+            options: ['Outdoors', 'Pee pads', 'Both', 'Other'],
+            detail: { when: ['Other'], label: 'Please specify' },
+          },
+        ],
+      },
+      {
+        title: 'Sleeping habits',
+        questions: [
+          {
+            key: 'sleepWhere',
+            label: 'Where does your dog usually sleep?',
+            options: ['In a crate', 'In their own bed', 'On the owner’s bed', 'Freely around the house', 'Other'],
+            detail: { when: ['Other'], label: 'Please specify' },
+          },
+        ],
+      },
+    ] as HabitSection[],
     selectOne: 'Select one',
     sexOptions: ['Female', 'Male', 'Prefer not to say'],
     alteredOptions: ['Spayed/neutered', 'Not spayed/neutered', 'Not applicable'],
@@ -249,20 +354,12 @@ const content = {
       altered: 'Spay/neuter status',
       vetClinic: 'Vet clinic',
       vetContact: 'Vet contact',
-      peopleBehaviour: 'Behaviour with unfamiliar people',
-      dogBehaviour: 'Behaviour with unfamiliar dogs',
-      otherBehaviour: 'Other behaviour notes',
-      offLeash: 'Off-leash experience',
       concerns: 'Behaviour concerns',
       biteHistory: 'History of growling, snapping or biting',
       biteDetails: 'Bite history details',
       triggers: 'Fears and triggers',
       homeAlone: 'Time home alone',
-      medicalNeeds: 'Medical conditions, allergies or special needs',
-      medications: 'Medications',
       favoriteActivities: 'Favourite activities',
-      treats: 'Treat permissions',
-      avoidFoods: 'Foods or treats to avoid',
       personality: 'Three words to describe your dog',
       additionalNotes: 'Additional comfort information',
     },

@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 import { asset } from '@/lib/asset'
 import { business } from '@/data/site'
 import { content, locale } from '@/i18n'
+import type { HabitQuestion } from '@/i18n/locales/en'
 
 const ownerEmail = business.email
 const submitted = ref(false)
@@ -21,20 +22,12 @@ const form = reactive({
   altered: '',
   vetClinic: '',
   vetContact: '',
-  peopleBehaviour: '',
-  dogBehaviour: '',
-  otherBehaviour: '',
-  offLeash: '',
   concerns: [] as string[],
   biteHistory: '',
   biteDetails: '',
   triggers: '',
   homeAlone: '',
-  medicalNeeds: '',
-  medications: '',
   favoriteActivities: '',
-  treats: '',
-  avoidFoods: '',
   personality: '',
   additionalNotes: '',
 })
@@ -140,6 +133,26 @@ function ageFrom(dob: string) {
   return `${Math.floor(months / 12)}y ${months % 12}m`
 }
 
+/** Answers to the data-driven habit questions (see intake.habits in the locales). */
+const habits = reactive<Record<string, string>>({})
+const habitDetails = reactive<Record<string, string>>({})
+
+function resetHabits() {
+  for (const section of content.value.intake.habits) {
+    for (const q of section.questions) {
+      habits[q.key] = ''
+      habitDetails[q.key] = ''
+    }
+  }
+}
+resetHabits()
+
+function habitAnswer(q: HabitQuestion) {
+  const answer = habits[q.key] ?? ''
+  const detail = q.detail?.when.includes(answer) ? (habitDetails[q.key] ?? '').trim() : ''
+  return detail ? `${answer}: ${detail}` : answer
+}
+
 function joinValue(value: string | string[]) {
   const empty = content.value.intake.notProvided
   return Array.isArray(value) ? value.join(', ') || empty : value || empty
@@ -158,23 +171,16 @@ function resetForm() {
     altered: '',
     vetClinic: '',
     vetContact: '',
-    peopleBehaviour: '',
-    dogBehaviour: '',
-    otherBehaviour: '',
-    offLeash: '',
     concerns: [],
     biteHistory: '',
     biteDetails: '',
     triggers: '',
     homeAlone: '',
-    medicalNeeds: '',
-    medications: '',
     favoriteActivities: '',
-    treats: '',
-    avoidFoods: '',
     personality: '',
     additionalNotes: '',
   })
+  resetHabits()
   clearPhoto()
   submitted.value = false
   submitError.value = false
@@ -192,20 +198,15 @@ async function submitForm() {
     [labels.altered, form.altered],
     [labels.vetClinic, form.vetClinic],
     [labels.vetContact, form.vetContact],
-    [labels.peopleBehaviour, form.peopleBehaviour],
-    [labels.dogBehaviour, form.dogBehaviour],
-    [labels.otherBehaviour, form.otherBehaviour],
-    [labels.offLeash, form.offLeash],
     [labels.concerns, form.concerns],
     [labels.biteHistory, form.biteHistory],
     [labels.biteDetails, form.biteDetails],
     [labels.triggers, form.triggers],
+    ...content.value.intake.habits.flatMap((section) =>
+      section.questions.map((q): [string, string] => [q.label, habitAnswer(q)]),
+    ),
     [labels.homeAlone, form.homeAlone],
-    [labels.medicalNeeds, form.medicalNeeds],
-    [labels.medications, form.medications],
     [labels.favoriteActivities, form.favoriteActivities],
-    [labels.treats, form.treats],
-    [labels.avoidFoods, form.avoidFoods],
     [labels.personality, form.personality],
     [labels.additionalNotes, form.additionalNotes],
   ]
@@ -360,12 +361,6 @@ async function submitForm() {
 
             <fieldset class="space-y-5">
               <legend class="font-display text-2xl">{{ content.intake.sections.behaviour }}</legend>
-              <div class="grid gap-5 sm:grid-cols-2">
-                <label class="field">{{ content.intake.fields.peopleBehaviour }} <textarea v-model="form.peopleBehaviour" rows="3" /></label>
-                <label class="field">{{ content.intake.fields.dogBehaviour }} <textarea v-model="form.dogBehaviour" rows="3" /></label>
-                <label class="field sm:col-span-2">{{ content.intake.fields.otherBehaviour }} <textarea v-model="form.otherBehaviour" rows="3" /></label>
-              </div>
-              <label class="field">{{ content.intake.fields.offLeash }} <textarea v-model="form.offLeash" rows="2" /></label>
               <div>
                 <p class="mb-3 text-sm font-medium">{{ content.intake.fields.concernsPrompt }}</p>
                 <div class="grid gap-3 sm:grid-cols-2">
@@ -380,15 +375,36 @@ async function submitForm() {
               <label class="field">{{ content.intake.fields.triggers }} <textarea v-model="form.triggers" rows="3" :placeholder="content.intake.fields.triggersPlaceholder" /></label>
             </fieldset>
 
+            <fieldset v-for="section in content.intake.habits" :key="section.title" class="space-y-5">
+              <legend class="font-display text-2xl">{{ section.title }}</legend>
+              <p v-if="section.note" class="text-sm text-ink/60">{{ section.note }}</p>
+              <div class="grid gap-5 sm:grid-cols-2 sm:items-end">
+                <template v-for="q in section.questions" :key="q.key">
+                  <label class="field">
+                    {{ q.label }}
+                    <select v-if="q.options" v-model="habits[q.key]">
+                      <option value="">{{ content.intake.selectOne }}</option>
+                      <option v-for="opt in q.options" :key="opt">{{ opt }}</option>
+                    </select>
+                    <input v-else v-model="habits[q.key]" type="text" :placeholder="q.placeholder" />
+                  </label>
+                  <label v-if="q.detail && q.detail.when.includes(habits[q.key] ?? '')" class="field">
+                    {{ q.detail.label }}
+                    <select v-if="q.detail.options" v-model="habitDetails[q.key]">
+                      <option value="">{{ content.intake.selectOne }}</option>
+                      <option v-for="opt in q.detail.options" :key="opt">{{ opt }}</option>
+                    </select>
+                    <input v-else v-model="habitDetails[q.key]" type="text" />
+                  </label>
+                </template>
+              </div>
+            </fieldset>
+
             <fieldset class="space-y-5">
               <legend class="font-display text-2xl">{{ content.intake.sections.careComfort }}</legend>
               <div class="grid gap-5 sm:grid-cols-2">
                 <label class="field">{{ content.intake.fields.homeAlone }} <input v-model="form.homeAlone" type="text" /></label>
                 <label class="field">{{ content.intake.fields.favoriteActivities }} <input v-model="form.favoriteActivities" type="text" /></label>
-                <label class="field sm:col-span-2">{{ content.intake.fields.medicalNeeds }} <textarea v-model="form.medicalNeeds" rows="3" /></label>
-                <label class="field sm:col-span-2">{{ content.intake.fields.medications }} <textarea v-model="form.medications" rows="3" /></label>
-                <label class="field sm:col-span-2">{{ content.intake.fields.treats }} <textarea v-model="form.treats" rows="3" /></label>
-                <label class="field sm:col-span-2">{{ content.intake.fields.avoidFoods }} <textarea v-model="form.avoidFoods" rows="2" /></label>
                 <label class="field sm:col-span-2">{{ content.intake.fields.personality }} <input v-model="form.personality" type="text" /></label>
                 <label class="field sm:col-span-2">{{ content.intake.fields.additionalNotes }} <textarea v-model="form.additionalNotes" rows="4" /></label>
               </div>
