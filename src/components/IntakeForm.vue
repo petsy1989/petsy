@@ -18,6 +18,8 @@ const form = reactive({
   dobYear: '',
   dobMonth: '',
   dobDay: '',
+  weight: '',
+  weightUnit: 'lb' as 'lb' | 'kg',
   sex: '',
   altered: '',
   vetClinic: '',
@@ -29,7 +31,6 @@ const form = reactive({
   homeAlone: '',
   favoriteActivities: '',
   personality: '',
-  additionalNotes: '',
 })
 
 const PHOTO_MAX_WIDTH = 1000
@@ -138,11 +139,13 @@ const habits = reactive<Record<string, string>>({})
 const habitDetails = reactive<Record<string, string>>({})
 
 function resetHabits() {
-  for (const section of content.value.intake.habits) {
-    for (const q of section.questions) {
-      habits[q.key] = ''
-      habitDetails[q.key] = ''
-    }
+  const questions = [
+    ...content.value.intake.habits.flatMap((section) => section.questions),
+    ...content.value.intake.careQuestions,
+  ]
+  for (const q of questions) {
+    habits[q.key] = ''
+    habitDetails[q.key] = ''
   }
 }
 resetHabits()
@@ -167,6 +170,8 @@ function resetForm() {
     dobYear: '',
     dobMonth: '',
     dobDay: '',
+    weight: '',
+    weightUnit: 'lb',
     sex: '',
     altered: '',
     vetClinic: '',
@@ -178,7 +183,6 @@ function resetForm() {
     homeAlone: '',
     favoriteActivities: '',
     personality: '',
-    additionalNotes: '',
   })
   resetHabits()
   clearPhoto()
@@ -194,6 +198,7 @@ async function submitForm() {
     [labels.dogName, form.dogName],
     [labels.breed, form.breed],
     [labels.dateOfBirth, dateOfBirth.value ? `${dateOfBirth.value} (${ageFrom(dateOfBirth.value)})` : ''],
+    [labels.weight, form.weight ? `${form.weight} ${content.value.intake.fields[form.weightUnit === 'lb' ? 'weightLb' : 'weightKg']}` : ''],
     [labels.sex, form.sex],
     [labels.altered, form.altered],
     [labels.vetClinic, form.vetClinic],
@@ -207,8 +212,8 @@ async function submitForm() {
     ),
     [labels.homeAlone, form.homeAlone],
     [labels.favoriteActivities, form.favoriteActivities],
+    ...content.value.intake.careQuestions.map((q): [string, string] => [q.label, habitAnswer(q)]),
     [labels.personality, form.personality],
-    [labels.additionalNotes, form.additionalNotes],
   ]
 
   const body = fields.map(([label, value]) => `${label}: ${joinValue(value)}`).join('\n\n')
@@ -324,6 +329,25 @@ async function submitForm() {
                     </select>
                   </div>
                 </div>
+                <div class="field">
+                  <span>{{ content.intake.fields.weight }}</span>
+                  <div class="relative">
+                    <input v-model="form.weight" class="weight-input" type="number" inputmode="decimal" min="0" step="0.1" />
+                    <div class="absolute top-1/2 right-1.5 flex -translate-y-1/2 rounded-full bg-ink/10 p-0.5 text-xs font-medium" role="group" :aria-label="content.intake.fields.weight">
+                      <button
+                        v-for="unit in (['lb', 'kg'] as const)"
+                        :key="unit"
+                        type="button"
+                        class="rounded-full px-3 py-1 transition-colors"
+                        :class="form.weightUnit === unit ? 'bg-forest text-cream' : 'text-ink/60'"
+                        :aria-pressed="form.weightUnit === unit"
+                        @click="form.weightUnit = unit"
+                      >
+                        {{ content.intake.fields[unit === 'lb' ? 'weightLb' : 'weightKg'] }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
                 <label class="field">{{ content.intake.fields.sex }} <select v-model="form.sex" required><option value="" disabled>{{ content.intake.selectOne }}</option><option v-for="opt in content.intake.sexOptions" :key="opt">{{ opt }}</option></select></label>
                 <label class="field">{{ content.intake.fields.altered }} <select v-model="form.altered" required><option value="" disabled>{{ content.intake.selectOne }}</option><option v-for="opt in content.intake.alteredOptions" :key="opt">{{ opt }}</option></select></label>
                 <div class="field">
@@ -378,8 +402,8 @@ async function submitForm() {
             <fieldset v-for="section in content.intake.habits" :key="section.title" class="space-y-5">
               <legend class="font-display text-2xl">{{ section.title }}</legend>
               <p v-if="section.note" class="text-sm text-ink/60">{{ section.note }}</p>
-              <div class="grid gap-5 sm:grid-cols-2 sm:items-end">
-                <template v-for="q in section.questions" :key="q.key">
+              <div class="grid gap-5 sm:grid-cols-2 sm:items-start">
+                <div v-for="q in section.questions" :key="q.key" class="flex flex-col gap-5">
                   <label class="field">
                     {{ q.label }}
                     <select v-if="q.options" v-model="habits[q.key]">
@@ -396,7 +420,7 @@ async function submitForm() {
                     </select>
                     <input v-else v-model="habitDetails[q.key]" type="text" />
                   </label>
-                </template>
+                </div>
               </div>
             </fieldset>
 
@@ -405,8 +429,25 @@ async function submitForm() {
               <div class="grid gap-5 sm:grid-cols-2">
                 <label class="field">{{ content.intake.fields.homeAlone }} <input v-model="form.homeAlone" type="text" /></label>
                 <label class="field">{{ content.intake.fields.favoriteActivities }} <input v-model="form.favoriteActivities" type="text" /></label>
+                <div v-for="q in content.intake.careQuestions" :key="q.key" class="flex flex-col gap-5">
+                  <label class="field">
+                    {{ q.label }}
+                    <select v-if="q.options" v-model="habits[q.key]">
+                      <option value="">{{ content.intake.selectOne }}</option>
+                      <option v-for="opt in q.options" :key="opt">{{ opt }}</option>
+                    </select>
+                    <input v-else v-model="habits[q.key]" type="text" :placeholder="q.placeholder" />
+                  </label>
+                  <label v-if="q.detail && q.detail.when.includes(habits[q.key] ?? '')" class="field">
+                    {{ q.detail.label }}
+                    <select v-if="q.detail.options" v-model="habitDetails[q.key]">
+                      <option value="">{{ content.intake.selectOne }}</option>
+                      <option v-for="opt in q.detail.options" :key="opt">{{ opt }}</option>
+                    </select>
+                    <input v-else v-model="habitDetails[q.key]" type="text" />
+                  </label>
+                </div>
                 <label class="field sm:col-span-2">{{ content.intake.fields.personality }} <input v-model="form.personality" type="text" /></label>
-                <label class="field sm:col-span-2">{{ content.intake.fields.additionalNotes }} <textarea v-model="form.additionalNotes" rows="4" /></label>
               </div>
             </fieldset>
 
@@ -470,6 +511,10 @@ async function submitForm() {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2326301f' stroke-opacity='0.8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.9rem center;
+}
+
+.field .weight-input {
+  padding-right: 7rem;
 }
 
 .photo-btn {

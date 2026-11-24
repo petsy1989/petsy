@@ -183,6 +183,9 @@ const content = {
       dobYear: '年',
       dobMonth: '月',
       dobDay: '日',
+      weight: '體重',
+      weightLb: '磅',
+      weightKg: '公斤',
       sex: '性別',
       altered: '結紮狀態',
       vetClinic: '獸醫診所',
@@ -195,7 +198,6 @@ const content = {
       homeAlone: '牠可以獨自在家多久？',
       favoriteActivities: '最喜歡的活動',
       personality: '用三個詞形容您的狗狗',
-      additionalNotes: '還有什麼能讓牠更有家的感覺？',
       photo: '狗狗的照片',
       photoPlaceholder: '尚未選擇照片',
       photoUpload: '上傳',
@@ -203,38 +205,6 @@ const content = {
       photoError: '無法讀取這張照片，請改用 JPEG 或 PNG。',
     },
     habits: [
-      {
-        title: '餵食說明',
-        note: '若由您提供食物。',
-        questions: [
-          {
-            key: 'feedTimes',
-            label: '狗狗一天需要餵幾餐？',
-            options: ['1 餐', '2 餐', '3 餐'],
-          },
-          {
-            key: 'feedAmount',
-            label: '狗狗每餐通常吃多少？（例如：½ 杯、100 克，或已預先分裝好的餐點）',
-          },
-        ],
-      },
-      {
-        title: '藥物與過敏',
-        questions: [
-          {
-            key: 'medication',
-            label: '狗狗是否服用任何藥物或保健品？',
-            options: ['是', '否'],
-            detail: { when: ['是'], label: '若有，請提供：藥物或保健品名稱、劑量、給藥時間（何時需要給藥？）' },
-          },
-          {
-            key: 'allergies',
-            label: '狗狗是否有已知的過敏或敏感？',
-            options: ['是', '否'],
-            detail: { when: ['是'], label: '若有，請說明' },
-          },
-        ],
-      },
       {
         title: '散步與戶外習慣',
         questions: [
@@ -278,7 +248,6 @@ const content = {
           {
             key: 'pottyFreq',
             label: '狗狗通常多久需要上一次廁所？',
-            options: ['很少', '有時', '經常'],
           },
           {
             key: 'pottyWhere',
@@ -298,6 +267,29 @@ const content = {
             detail: { when: ['其他'], label: '請說明' },
           },
         ],
+      },
+    ],
+    careQuestions: [
+      {
+        key: 'feedTimes',
+        label: '狗狗一天需要餵幾餐？',
+        options: ['1 餐', '2 餐', '3 餐'],
+      },
+      {
+        key: 'feedAmount',
+        label: '狗狗每餐通常吃多少？',
+      },
+      {
+        key: 'medication',
+        label: '狗狗是否服用任何藥物或保健品？',
+        options: ['是', '否'],
+        detail: { when: ['是'], label: '若有，請提供：藥物或保健品名稱、劑量、給藥時間（何時需要給藥？）' },
+      },
+      {
+        key: 'allergies',
+        label: '狗狗是否有已知的過敏或敏感？',
+        options: ['是', '否'],
+        detail: { when: ['是'], label: '若有，請說明' },
       },
     ],
     selectOne: '請選擇',
@@ -322,6 +314,7 @@ const content = {
       dogName: '狗狗名字',
       breed: '品種',
       dateOfBirth: '出生日期',
+      weight: '體重',
       sex: '性別',
       altered: '結紮狀態',
       vetClinic: '獸醫診所',
@@ -333,7 +326,6 @@ const content = {
       homeAlone: '獨自在家時間',
       favoriteActivities: '最喜歡的活動',
       personality: '用三個詞形容您的狗狗',
-      additionalNotes: '其他舒適資訊',
     },
   },
 } as unknown as Content

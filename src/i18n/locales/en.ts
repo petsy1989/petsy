@@ -211,6 +211,9 @@ const content = {
       dobYear: 'Year',
       dobMonth: 'Month',
       dobDay: 'Day',
+      weight: 'Weight',
+      weightLb: 'lb',
+      weightKg: 'kg',
       sex: 'Sex',
       altered: 'Spay/neuter status',
       vetClinic: 'Vet clinic',
@@ -223,7 +226,6 @@ const content = {
       homeAlone: 'How long can they be home alone?',
       favoriteActivities: 'Favourite activities',
       personality: 'Three words to describe your dog',
-      additionalNotes: 'Anything else that would help them feel at home?',
       photo: 'Photo of your dog',
       photoPlaceholder: 'No photo selected',
       photoUpload: 'Upload',
@@ -231,38 +233,6 @@ const content = {
       photoError: 'That photo couldn’t be read. Please try a JPEG or PNG.',
     },
     habits: [
-      {
-        title: 'Feeding instructions',
-        note: 'If you are providing food.',
-        questions: [
-          {
-            key: 'feedTimes',
-            label: 'How many times a day should your dog be fed?',
-            options: ['1', '2', '3'],
-          },
-          {
-            key: 'feedAmount',
-            label: 'How much food does your dog usually eat per meal? (For example, ½ cup, 100 g, or pre-portioned meals ready to serve)',
-          },
-        ],
-      },
-      {
-        title: 'Medication and allergies',
-        questions: [
-          {
-            key: 'medication',
-            label: 'Does your dog take any medication or supplements?',
-            options: ['Yes', 'No'],
-            detail: { when: ['Yes'], label: 'If yes, please provide: name of medication or supplement, dosage, and administration time(s) (when should it be given?)' },
-          },
-          {
-            key: 'allergies',
-            label: 'Does your dog have any known allergies or sensitivities?',
-            options: ['Yes', 'No'],
-            detail: { when: ['Yes'], label: 'If yes, please specify' },
-          },
-        ],
-      },
       {
         title: 'Walking and outdoor habits',
         questions: [
@@ -306,7 +276,6 @@ const content = {
           {
             key: 'pottyFreq',
             label: 'How often does your dog usually need potty breaks?',
-            options: ['Rarely', 'Sometimes', 'Often'],
           },
           {
             key: 'pottyWhere',
@@ -328,6 +297,29 @@ const content = {
         ],
       },
     ] as HabitSection[],
+    careQuestions: [
+      {
+        key: 'feedTimes',
+        label: 'How many times a day should your dog be fed?',
+        options: ['1', '2', '3'],
+      },
+      {
+        key: 'feedAmount',
+        label: 'How much food does your dog usually eat per meal?',
+      },
+      {
+        key: 'medication',
+        label: 'Does your dog take any medication or supplements?',
+        options: ['Yes', 'No'],
+        detail: { when: ['Yes'], label: 'If yes, please provide: name of medication or supplement, dosage, and administration time(s) (when should it be given?)' },
+      },
+      {
+        key: 'allergies',
+        label: 'Does your dog have any known allergies or sensitivities?',
+        options: ['Yes', 'No'],
+        detail: { when: ['Yes'], label: 'If yes, please specify' },
+      },
+    ] as HabitQuestion[],
     selectOne: 'Select one',
     sexOptions: ['Female', 'Male', 'Prefer not to say'],
     alteredOptions: ['Spayed/neutered', 'Not spayed/neutered', 'Not applicable'],
@@ -350,6 +342,7 @@ const content = {
       dogName: 'Dog name',
       breed: 'Breed',
       dateOfBirth: 'Date of birth',
+      weight: 'Weight',
       sex: 'Sex',
       altered: 'Spay/neuter status',
       vetClinic: 'Vet clinic',
@@ -361,7 +354,6 @@ const content = {
       homeAlone: 'Time home alone',
       favoriteActivities: 'Favourite activities',
       personality: 'Three words to describe your dog',
-      additionalNotes: 'Additional comfort information',
     },
   },
 } as const
