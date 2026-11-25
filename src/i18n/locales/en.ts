@@ -11,7 +11,7 @@ export interface HabitQuestion {
   options?: string[]
   placeholder?: string
   /** Extra answer shown when the selected option is one of `when`. */
-  detail?: { when: string[]; label: string; options?: string[] }
+  detail?: { when: string[]; label: string; options?: string[]; multiline?: boolean }
 }
 
 export interface HabitSection {
@@ -297,13 +297,10 @@ const content = {
     ] as HabitSection[],
     careQuestions: [
       {
-        key: 'feedTimes',
-        label: 'How many times a day should your dog be fed?',
-        options: ['1', '2', '3'],
-      },
-      {
-        key: 'feedAmount',
-        label: 'How much food does your dog usually eat per meal?',
+        key: 'meals',
+        label: 'Do you provide meals and/or treats?',
+        options: ['Yes', 'No'],
+        detail: { when: ['Yes'], label: 'How many meals per day and how much per meal? (e.g. ½ cup, 100 g, pre-portioned meals, or any treat limits or instructions.)', multiline: true },
       },
       {
         key: 'medication',

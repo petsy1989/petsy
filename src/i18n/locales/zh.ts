@@ -269,13 +269,10 @@ const content = {
     ],
     careQuestions: [
       {
-        key: 'feedTimes',
-        label: '狗狗一天需要餵幾餐？',
-        options: ['1 餐', '2 餐', '3 餐'],
-      },
-      {
-        key: 'feedAmount',
-        label: '狗狗每餐通常吃多少？',
+        key: 'meals',
+        label: '您是否會提供餐點和／或零食？',
+        options: ['是', '否'],
+        detail: { when: ['是'], label: '每天幾餐、每餐多少？（例如：½ 杯、100 克、預先分裝好的餐點，或任何零食限制或注意事項。）', multiline: true },
       },
       {
         key: 'medication',

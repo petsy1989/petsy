@@ -425,6 +425,7 @@ async function submitForm() {
                       <option value="">{{ content.intake.selectOne }}</option>
                       <option v-for="opt in q.detail.options" :key="opt">{{ opt }}</option>
                     </select>
+                    <textarea v-else-if="q.detail.multiline" v-model="habitDetails[q.key]" rows="3" />
                     <input v-else v-model="habitDetails[q.key]" type="text" />
                   </label>
                 </div>
@@ -451,6 +452,7 @@ async function submitForm() {
                       <option value="">{{ content.intake.selectOne }}</option>
                       <option v-for="opt in q.detail.options" :key="opt">{{ opt }}</option>
                     </select>
+                    <textarea v-else-if="q.detail.multiline" v-model="habitDetails[q.key]" rows="3" />
                     <input v-else v-model="habitDetails[q.key]" type="text" />
                   </label>
                 </div>
